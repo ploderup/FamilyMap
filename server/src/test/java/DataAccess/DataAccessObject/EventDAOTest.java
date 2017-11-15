@@ -4,9 +4,12 @@ import org.junit.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 import DataAccess.Database;
 import Model.Event;
 import Model.Person;
+import Model.User;
 
 import static org.junit.Assert.*;
 
@@ -51,18 +54,15 @@ public class EventDAOTest {
      */
     @Test
     public void testCreate() throws Exception {
-        Person p;
-        Event e;
         PreparedStatement ps;
         ResultSet rs;
 
-        // create person
-        p = new Person("abc-123", "ploderup", "Peter", "Loderup", "m", null, null, null);
-        PersonDAO.create(p);
+        // create user and person
+        UserDAO.create(new User("johndoe", "password", "jd@gmail.com", "John", "Doe", "m"));
+        PersonDAO.create(new Person("abc-123", "johndoe", "John", "Doe", "m", null, null, null));
 
         // create event
-        e = new Event("xyz-890", "ploderup", "abc-123", 1.5, 2.9, "Norway", "Oslo", "birth", 1976);
-        EventDAO.create(e);
+        EventDAO.create(new Event("xyz-890", "johndoe", "abc-123", 1.5, 2.9, "Norway", "Oslo", "birth", 1976));
 
         // read from database
         ps = database.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE " +
@@ -73,7 +73,7 @@ public class EventDAOTest {
         // check assertions
         assertTrue(rs.next());
         assertEquals(rs.getString("event_id"), "xyz-890");
-        assertEquals(rs.getString("descendant"), "ploderup");
+        assertEquals(rs.getString("descendant"), "johndoe");
         assertEquals(rs.getString("person_id"), "abc-123");
         assertTrue(rs.getDouble("latitude") == 1.5);
         assertTrue(rs.getDouble("longitude") == 2.9);
@@ -87,16 +87,43 @@ public class EventDAOTest {
     /**
      * TEST CREATE (RECURSIVE):
      * Note, that this test functions as a comprehensive test for not only the recursive create
-     * function, but also for each createEvent method (e.g., createBirth, createDeath, etc.). As
-     * many of those functions rely on some degree of random-ness to decide as to whether and when
-     * someone was baptized, or when someone died, unit testing is impossible without removing the
-     * random aspect of the methods. The methods have been tested individually and, as such, I felt
-     * that a single test for the entire recursive create method was satisfactory. Also, note that
-     * this method depends on the method in the PersonDAO class of the same name. That function is
-     * tested similarly and has been shown to work.
+     * function, but also for each createEvent method (e.g., createBirth, createDeath, etc.). Also,
+     * note that this method depends on having a family tree already established;
+     * PersonDAO.createRecursive is used here to accomplish that. That method has been tested and
+     * shown to function correctly.
      */
+    @Test
     public void testCreateRecursive() throws Exception {
-        // TODO: write tests for recursive creation of events
+        final int NUM_GENERATIONS = 4;
+        final double MIN_NUM_EVENTS = 92;
+
+        String un;
+        Person p;
+        String pi;
+        PreparedStatement ps;
+        ResultSet rs;
+        int i;
+
+        // create tree
+        un = "username";
+        UserDAO.create(new User(un, "password", "email@mail.net", "John", "Smith", "m"));
+        p = new Person(un, "John", "Smith", "m");
+        pi = p.getPersonID();
+        PersonDAO.createRecursive(un, p, NUM_GENERATIONS);
+
+        // create events
+        EventDAO.createRecursive(un, pi, 1800);
+
+        // retrieve all events
+        ps = database.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE " +
+                "descendant = ?;");
+        ps.setString(1, un);
+        rs = ps.executeQuery();
+        i = 0;
+        while(rs.next()) i++;
+
+        // check assertions
+        assertTrue(i >= MIN_NUM_EVENTS);
     }
 
     /**
@@ -114,7 +141,7 @@ public class EventDAOTest {
         ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
                 "?, ?, ?, ?, ?, ?, ?, ?);");
         ps.setString(1, "xyz-890");
-        ps.setString(2, "ploderup");
+        ps.setString(2, "johndoe");
         ps.setString(3, "abc-123");
         ps.setDouble(4, 1.5);
         ps.setDouble(5, 2.9);
@@ -129,7 +156,7 @@ public class EventDAOTest {
 
         // check assertions
         assertEquals(e.getEventID(), "xyz-890");
-        assertEquals(e.getDescendant(), "ploderup");
+        assertEquals(e.getDescendant(), "johndoe");
         assertEquals(e.getPersonID(), "abc-123");
         assertTrue(e.getLatitude() == 1.5);
         assertTrue(e.getLongitude() == 2.9);
@@ -141,9 +168,56 @@ public class EventDAOTest {
 
     /**
      * TEST READ FAMILY EVENTS
+     *
+     * @throws Exception
      */
+    @Test
     public void testReadFamilyEvents() throws Exception {
-        // TODO: write this method
+        PreparedStatement ps;
+        ArrayList<Event> es;
+
+        // create event
+        ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
+                "?, ?, ?, ?, ?, ?, ?, ?);");
+        ps.setString(1, "xyz-890");
+        ps.setString(2, "johndoe");
+        ps.setString(3, "abc-123");
+        ps.setDouble(4, 1.5);
+        ps.setDouble(5, 2.9);
+        ps.setString(6, "Norway");
+        ps.setString(7, "Oslo");
+        ps.setString(8, "birth");
+        ps.setInt(9, 1976);
+        ps.executeUpdate();
+
+        // create event for another user
+        ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
+                "?, ?, ?, ?, ?, ?, ?, ?);");
+        ps.setString(1, "abc-123");
+        ps.setString(2, "aloderup");
+        ps.setString(3, "xyz-890");
+        ps.setDouble(4, 1.5);
+        ps.setDouble(5, 2.9);
+        ps.setString(6, "Norway");
+        ps.setString(7, "Oslo");
+        ps.setString(8, "birth");
+        ps.setInt(9, 1976);
+        ps.executeUpdate();
+
+        // read from database
+        es = EventDAO.readFamilyEvents("johndoe");
+
+        // check assertions
+        assertEquals(es.size(), 1);
+        assertEquals(es.get(0).getEventID(), "xyz-890");
+        assertEquals(es.get(0).getDescendant(), "johndoe");
+        assertEquals(es.get(0).getPersonID(), "abc-123");
+        assertTrue(es.get(0).getLatitude() == 1.5);
+        assertTrue(es.get(0).getLongitude() == 2.9);
+        assertEquals(es.get(0).getCountry(), "Norway");
+        assertEquals(es.get(0).getCity(), "Oslo");
+        assertEquals(es.get(0).getEventType(), "birth");
+        assertEquals(es.get(0).getYear(), 1976);
     }
 
     /**
@@ -152,7 +226,44 @@ public class EventDAOTest {
      * @throws Exception
      */
     public void testReadEvent() throws Exception {
-        // TODO: write this method
+        PreparedStatement ps;
+        Event e;
+
+        // create event
+        ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
+                "?, ?, ?, ?, ?, ?, ?, ?);");
+        ps.setString(1, "xyz-890");
+        ps.setString(2, "johndoe");
+        ps.setString(3, "abc-123");
+        ps.setDouble(4, 1.5);
+        ps.setDouble(5, 2.9);
+        ps.setString(6, "Norway");
+        ps.setString(7, "Oslo");
+        ps.setString(8, "birth");
+        ps.setInt(9, 1976);
+        ps.executeUpdate();
+
+        // read from database
+        e = EventDAO.readEvent("bad_username", "xyz-890");
+        assertEquals(e, null);
+
+        // read from database
+        e = EventDAO.readEvent("johndoe", "bad_event_id");
+        assertEquals(e, null);
+
+        // read from database
+        e = EventDAO.readEvent("johndoe", "xyz-890");
+
+        // check assertions
+        assertEquals(e.getEventID(), "xyz-890");
+        assertEquals(e.getDescendant(), "johndoe");
+        assertEquals(e.getPersonID(), "abc-123");
+        assertTrue(e.getLatitude() == 1.5);
+        assertTrue(e.getLongitude() == 2.9);
+        assertEquals(e.getCountry(), "Norway");
+        assertEquals(e.getCity(), "Oslo");
+        assertEquals(e.getEventType(), "birth");
+        assertEquals(e.getYear(), 1976);
     }
 
     /**
@@ -170,7 +281,7 @@ public class EventDAOTest {
         ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
                 "?, ?, ?, ?, ?, ?, ?, ?);");
         ps.setString(1, "xyz-890");
-        ps.setString(2, "ploderup");
+        ps.setString(2, "johndoe");
         ps.setString(3, "abc-123");
         ps.setDouble(4, 1.5);
         ps.setDouble(5, 2.9);
@@ -206,8 +317,8 @@ public class EventDAOTest {
         ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
                 "?, ?, ?, ?, ?, ?, ?, ?);");
         ps.setString(1, "xyz-890");
-        ps.setString(2, "ploderup");
-        ps.setString(3, "abc-123");
+        ps.setString(2, "johndoe");
+        ps.setString(3, "person_id      ");
         ps.setDouble(4, 1.5);
         ps.setDouble(5, 2.9);
         ps.setString(6, "Norway");
@@ -218,7 +329,7 @@ public class EventDAOTest {
         ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
                 "?, ?, ?, ?, ?, ?, ?, ?);");
         ps.setString(1, "lol-911");
-        ps.setString(2, "jack_son");
+        ps.setString(2, "wongjackman");
         ps.setString(3, "person_id");
         ps.setDouble(4, 9.91);
         ps.setDouble(5, 2.09);
@@ -229,9 +340,9 @@ public class EventDAOTest {
         ps.executeUpdate();
         ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
                 "?, ?, ?, ?, ?, ?, ?, ?);");
-        ps.setString(1, "another_id");
-        ps.setString(2, "a_good_name");
-        ps.setString(3, "yet_another_id");
+        ps.setString(1, "bnd-007");
+        ps.setString(2, "jamesbond");
+        ps.setString(3, "person_id");
         ps.setDouble(4, 0);
         ps.setDouble(5, 0);
         ps.setString(6, "a_country");
@@ -254,8 +365,48 @@ public class EventDAOTest {
     /**
      * TEST DELETE CONDITIONAL
      */
-    public void testDeleteConditional() {
-        // TODO: write this method
+    @Test
+    public void testDeleteConditional() throws Exception{
+        PreparedStatement ps;
+        ResultSet rs;
+
+        // create event
+        ps = database.getConnection().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?," +
+                "?, ?, ?, ?, ?, ?, ?, ?);");
+        ps.setString(1, "xyz-890");
+        ps.setString(2, "johndoe");
+        ps.setString(3, "abc-123");
+        ps.setDouble(4, 1.5);
+        ps.setDouble(5, 2.9);
+        ps.setString(6, "Norway");
+        ps.setString(7, "Oslo");
+        ps.setString(8, "birth");
+        ps.setInt(9, 1976);
+        ps.executeUpdate();
+
+        // delete from database
+        EventDAO.deleteConditional("person_id", "xyz-890");
+
+        // retrieve from database
+        ps = database.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE " +
+                "event_id = ?");
+        ps.setString(1, "xyz-890");
+        rs = ps.executeQuery();
+
+        // check assertions
+        assertTrue(rs.next());
+
+        // delete from database
+        EventDAO.deleteConditional("event_id", "xyz-890");
+
+        // retrieve from database
+        ps = database.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE " +
+                "event_id = ?");
+        ps.setString(1, "xyz-890");
+        rs = ps.executeQuery();
+
+        // check assertions
+        assertFalse(rs.next());
     }
 
 

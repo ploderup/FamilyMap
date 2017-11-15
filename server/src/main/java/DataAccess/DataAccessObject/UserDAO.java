@@ -115,19 +115,6 @@ public class UserDAO {
 	}
 
     /**
-     * UPDATE:
-     * Corresponds with the UPDATE statement in SQL. Checks whether the username of the user object
-     * provided exists. If it does, values in the UserTable and PersonTable are then updated.
-     *
-     * Note, this method currently does nothing as I don't think its functionality is needed for
-     * use with this lab for CS240.
-     *
-     * @param user, a user object
-     * @deprecated
-     */
-    public static void update(User user) {}
-
-    /**
      * DELETE:
      * Corresponds with the DELETE statement in SQL. Searches UserTable for the given username. If
      * found, the user is deleted; else, no action is taken.

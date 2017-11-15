@@ -106,7 +106,6 @@ public class PersonDAO {
                 father_name = getMaleName();
                 father_last_name = person.getLastName();
                 mother_name = getFemaleName();
-                father_last_name = person.getLastName();
                 mother_maiden_name = getLastName();
 
                 // create father object
@@ -195,7 +194,8 @@ public class PersonDAO {
      * Corresponds with the SELECT statement in SQL. Searches PersonTable for all people whose
      * username value is equal to the given username.
      *
-     * @param username, non-empty string
+     * @param username, non-e
+        final int mpty string
      * @throws DatabaseException
      * @return ArrayList of person objects if found, null otherwise
      * @see Person

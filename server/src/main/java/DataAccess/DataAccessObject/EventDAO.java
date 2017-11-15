@@ -164,7 +164,7 @@ public class EventDAO {
         final int EVENT_ADDED = 1;
 
         try {
-            Event birth = new Event(person_id, username, getLocation(), "birth", birth_year);
+            Event birth = new Event(username, person_id, getLocation(), "birth", birth_year);
             create(birth);
             return EVENT_ADDED;
 
@@ -199,7 +199,7 @@ public class EventDAO {
 
             // create event
             try {
-                Event baptism = new Event(person_id, username, getLocation(), "baptism",
+                Event baptism = new Event(username, person_id, getLocation(), "baptism",
                                           year_of_baptism);
                 create(baptism);
 
@@ -233,9 +233,9 @@ public class EventDAO {
             Event marriage1, marriage2;
 
             // create events
-            marriage1 = new Event(person_id1, username, getLocation(), "marriage",
+            marriage1 = new Event(username, person_id1, getLocation(), "marriage",
                     year_of_marriage);
-            marriage2 = new Event(person_id2, username, getLocation(), "marriage",
+            marriage2 = new Event(username, person_id2, getLocation(), "marriage",
                     year_of_marriage);
             create(marriage1);
             create(marriage2);
@@ -281,7 +281,7 @@ public class EventDAO {
 
             // create event
             try {
-                Event death = new Event(person_id, username, getLocation(), "death", year_of_death);
+                Event death = new Event(username, person_id, getLocation(), "death", year_of_death);
                 create(death);
 
             } catch(Exception e) {
