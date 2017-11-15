@@ -1,4 +1,4 @@
-package Facade.Service;
+package Facade.Services;
 
 public class ClearServiceTest {
 }

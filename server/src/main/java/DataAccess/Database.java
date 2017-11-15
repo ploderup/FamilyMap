@@ -425,8 +425,9 @@ public class Database {
      */
     public void openConnection() throws DatabaseException {
         try {
+            // TODO: change path back for server (hard-coded for testing)
             // compose path to DB
-            final String CONNECTION_URL = "jdbc:sqlite:" + path_to_database;
+            final String CONNECTION_URL = "jdbc:sqlite:src/main/res/db/fms.sqlite";// + path_to_database;
 
             // open DB connection
             connection = DriverManager.getConnection(CONNECTION_URL);

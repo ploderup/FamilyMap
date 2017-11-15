@@ -1,4 +1,4 @@
-package DataAccess;
+package DataAccess.DataAccessObject;
 
 /**
  * Created by ploderup on 11/13/2017.

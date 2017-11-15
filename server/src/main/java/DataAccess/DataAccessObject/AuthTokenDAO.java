@@ -111,15 +111,6 @@ public class AuthTokenDAO {
 	}
 
     /**
-     * UPDATE:
-	 * Corresponds with the UPDATE statement in SQL. This function is never used.
-     *
-     * @param auth_token, an authorization token object
-     * @deprecated
-     */
-    public static void update(AuthToken auth_token) {}
-
-    /**
      * DELETE:
      * Corresponds with the DELETE statement in SQL. Searches AuthTokenTable for the given
 	 * authorization key. If found, the authorization token is deleted; else, no action is taken.

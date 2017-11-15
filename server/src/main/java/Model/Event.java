@@ -26,8 +26,8 @@ public class Event {
      * @param tp, event type (birth, baptism, etcetera...)
      * @param yr, year in which the event transpired
      */
-    public Event(String ei, String pi, String dt, int la, int lo, String co, String ci, String tp,
-                 int yr) {
+    public Event(String ei, String pi, String dt, Double la, Double lo, String co, String ci,
+                 String tp, int yr) {
         eventID = ei;
         personID = pi;
         descendant = dt;
@@ -65,8 +65,8 @@ public class Event {
      */
     public boolean membersValid() {
         // declarations
-        final int MAX_LATITUDE = 90;
-        final int MAX_LONGITUDE = 180;
+        final double MAX_LATITUDE = 90;
+        final double MAX_LONGITUDE = 180;
         final int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
         // check members
