@@ -308,19 +308,6 @@ public class PersonDAO {
     }
 
     /**
-     * UPDATE:
-     * Corresponds with the UPDATE statement in SQL. Checks whether the person object provided has
-     * a non-empty ID, and whether the descendant, father, mother and spouse associated with the
-     * person exist in the PersonTable. If so, the person in the Database with the same ID as the
-     * one given is updated. CODE COMMENTED AS NEVER USER FOR PROJECT.
-     *
-     * @param person, a person object
-     * @throws DatabaseException
-     * @deprecated
-     */
-    public static void update(Person person) throws DatabaseException {}
-
-    /**
      * DELETE:
      * Corresponds with the DELETE statement in SQL. Searches PersonTable for the given person ID.
      * If found, the person is deleted; else, no action is taken.

@@ -332,8 +332,8 @@ public class EventDAO {
             if(result_set.next()) {
                 // construct event
                 event = new Event(result_set.getString("event_id"),
-                                  result_set.getString("person_id"),
                                   result_set.getString("descendant"),
+                                  result_set.getString("person_id"),
                                   result_set.getDouble("latitude"),
                                   result_set.getDouble("longitude"),
                                   result_set.getString("country"),
@@ -394,8 +394,8 @@ public class EventDAO {
 
                 // construct person
                 temp = new Event(result_set.getString("event_id"),
-                                 result_set.getString("person_id"),
                                  result_set.getString("descendant"),
+                                 result_set.getString("person_id"),
                                  result_set.getDouble("latitude"),
                                  result_set.getDouble("longitude"),
                                  result_set.getString("country"),
@@ -453,8 +453,8 @@ public class EventDAO {
             if(result_set.next()) {
                 // construct event
                 event = new Event(result_set.getString("event_id"),
-                                  result_set.getString("person_id"),
                                   result_set.getString("descendant"),
+                                  result_set.getString("person_id"),
                                   result_set.getDouble("latitude"),
                                   result_set.getDouble("longitude"),
                                   result_set.getString("country"),
@@ -473,18 +473,6 @@ public class EventDAO {
             throw new DatabaseException("EventDAO.readEvent failed.", e);
         }
     }
-
-    /**
-     * UPDATE:
-     * Corresponds with the UPDATE statement in SQL. Checks whether the person associated with the
-     * event exists in the database, and whether the descendant given is that person's descendant.
-     * If so, the event is updated in the database.
-     *
-     * @param event, an event object
-     * @throws DatabaseException
-     * @deprecated
-     */
-    public static void update(Event event) throws DatabaseException {}
 
     /**
      * DELETE:
@@ -526,7 +514,7 @@ public class EventDAO {
      * DELETE ALL:
      * Corresponds with the DELETE statement in SQL. Deletes all data from EventTable.
      *
-     * @throws Exception	detailing reason for failure
+     * @throws DatabaseException detailing reason for failure
      */
     public static void deleteAll() throws DatabaseException {
         try {
