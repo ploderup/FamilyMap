@@ -1,0 +1,64 @@
+{
+  "users": [
+    {
+      "userName": "sheila",
+      "password": "parker",
+      "email": "sheila@parker.com",
+      "firstName": "Sheila",
+      "lastName": "Parker",
+      "gender": "f",
+      "personID": "Sheila_Parker"
+    }
+  ],
+  "persons": [
+    {
+      "firstName": "Sheila",
+      "lastName": "Parker",
+      "gender": "f",
+      "personID": "Sheila_Parker",
+      "father": "Patrick_Spencer",
+      "mother": "Im_really_good_at_names",
+      "descendant": "sheila"
+    },
+    {
+      "firstName": "Patrick",
+      "lastName": "Spencer",
+      "gender": "m",
+      "personID":"Patrick_Spencer",
+      "spouse": "Im_really_good_at_names",
+      "descendant": "sheila"
+    },
+    {
+      "firstName": "CS240",
+      "lastName": "JavaRocks",
+      "gender": "f",
+      "personID": "Im_really_good_at_names",
+      "spouse": "Patrick_Spencer",
+      "descendant": "sheila"
+    }
+  ],
+  "events": [
+    {
+      "eventType": "started family map",
+      "personID": "Sheila_Parker",
+      "city": "Salt Lake City",
+      "country": "United States",
+      "latitude": 40.7500,
+      "longitude": -110.1167,
+      "year": 2016,
+      "eventID": "Sheila_Family_Map",
+      "descendant":"sheila"
+    },
+    {
+      "eventType": "fixed this thing",
+      "personID": "Patrick_Spencer",
+      "city": "Provo",
+      "country": "United States",
+      "latitude": 40.2338,
+      "longitude": -111.6585,
+      "year": 2017,
+      "eventID": "I_hate_formatting",
+      "descendant": "sheila"
+    }
+  ]
+}
