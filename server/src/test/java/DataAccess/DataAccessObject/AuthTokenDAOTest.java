@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import DataAccess.Database;
 import Model.AuthToken;
+import Model.User;
 
 import static org.junit.Assert.*;
 
@@ -57,6 +58,7 @@ public class AuthTokenDAOTest {
         ResultSet rs;
 
         // create auth token
+        UserDAO.create(new User("ploderup", "password", "email@email.com", "Peter", "Loderup", "m"));
         at = new AuthToken("abc-123", "ploderup", null);
         AuthTokenDAO.create(at);
 

@@ -13,6 +13,9 @@ import Facade.Service.ClearService;
 
 import static org.junit.Assert.*;
 
+/**
+ * WARNING: This class will clear the database.
+ */
 public class ClearServiceTest {
 // BOOKENDS
     /**
@@ -41,6 +44,7 @@ public class ClearServiceTest {
         stmt.executeUpdate();
         stmt = Database.getInstance().getConnection().prepareStatement(sql4);
         stmt.executeUpdate();
+        Database.getInstance().closeConnection(true);
     }
 
     /**
@@ -49,7 +53,9 @@ public class ClearServiceTest {
      */
     @After
     public void tearDown() throws Exception {
-
+        Database.getInstance().openConnection();
+        Database.getInstance().clear();
+        Database.getInstance().closeConnection(true);
     }
 
 
@@ -61,8 +67,7 @@ public class ClearServiceTest {
      * as well as the functionality of the Database methods as a whole. Considering that the
      * correspondence between service and database methods is nearly one-to-one, only unit tests are
      * performed on the service methods. The DAOs are all tested individually, however, and their
-     * tests can be found in their respective folder. WARNING: This method will clear the database
-     * and commit its changes!
+     * tests can be found in their respective folder.
      * @throws Exception
      */
     @Test
@@ -98,6 +103,5 @@ public class ClearServiceTest {
                 ";");
         rs = ps.executeQuery();
         assertFalse(rs.next());
-        Database.getInstance().closeConnection(false);
     }
 }

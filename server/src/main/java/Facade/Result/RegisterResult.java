@@ -49,7 +49,7 @@ public class RegisterResult {
      * registration failure.
      */
     private String username;
-    public String getUserName() { return username; }
+    public String getUsername() { return username; }
     public void setUsername(String un) { username = un; }
 
     /**

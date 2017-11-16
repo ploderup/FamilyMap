@@ -83,7 +83,6 @@ public class EventService {
             // construct error result
             event_result = new EventResult(e.getMessage());
         }
-        
         return event_result;
     }
 
