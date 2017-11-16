@@ -195,7 +195,6 @@ public class PersonDAO {
      * username value is equal to the given username.
      *
      * @param username, non-e
-        final int mpty string
      * @throws DatabaseException
      * @return ArrayList of person objects if found, null otherwise
      * @see Person

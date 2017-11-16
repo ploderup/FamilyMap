@@ -419,13 +419,17 @@ public class Database {
 
     /**
      * OPEN CONNECTION:
-     * Opens a connection to the database and starts a transaction (i.e., disables auto-commit).
+     * Opens a connection to the database and starts a transaction (i.e., disables auto-commit). If
+     * the connection is already open, as should only be the case in testing, the method immediately
+     * returns.
      *
      * @throws  DatabaseException detailing reason for failure
      */
     public void openConnection() throws DatabaseException {
+        // connection open?
+        if(connection != null) return;
+
         try {
-            // TODO: change path back for server (hard-coded for testing)
             // compose path to DB
             final String CONNECTION_URL = "jdbc:sqlite:" + path_to_database;
 
