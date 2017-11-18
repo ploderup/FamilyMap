@@ -6,16 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import java.net.HttpURLConnection;
 
 public class LoginFragment extends Fragment {
 // MEMBERS
+    private final String TAG = "LoginFragment";
+    private UserInfo user_info;
     private EditText mHostField;
     private EditText mPortField;
     private EditText mUsernameField;
@@ -23,7 +27,7 @@ public class LoginFragment extends Fragment {
     private EditText mFNameField;
     private EditText mLNameField;
     private EditText mEmailField;
-    // private RadioGroup mGenderSelection;
+    private RadioGroup mGenderButton;
     private Button mRegisterButton;
     private Button mLoginButton;
 
@@ -44,6 +48,9 @@ public class LoginFragment extends Fragment {
         // Inflate the fragment's layout
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
+        // Initialize class for user input
+        user_info = new UserInfo();
+
         // Wire-up all widgets
         mHostField = v.findViewById(R.id.host_edit_text);
         mHostField.addTextChangedListener(new TextWatcher() {
@@ -54,8 +61,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setHost(s.toString());
+                // Save new info to UserInfo class
+                user_info.setServerHost(charSequence.toString());
             }
 
             @Override
@@ -63,7 +70,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mPortField = v.findViewById(R.id.host_edit_text);
+        mPortField = v.findViewById(R.id.port_edit_text);
         mPortField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -72,8 +79,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setPort(s.toString());
+                // Save new info to UserInfo class
+                user_info.setServerPort(charSequence.toString());
             }
 
             @Override
@@ -81,7 +88,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mUsernameField = v.findViewById(R.id.host_edit_text);
+        mUsernameField = v.findViewById(R.id.username_edit_text);
         mUsernameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -90,8 +97,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setUsername(s.toString());
+                // Save new info to UserInfo class
+                user_info.setUsername(charSequence.toString());
             }
 
             @Override
@@ -99,7 +106,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mPasswordField = v.findViewById(R.id.host_edit_text);
+        mPasswordField = v.findViewById(R.id.password_edit_text);
         mPasswordField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -108,8 +115,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setPassword(s.toString());
+                // Save new info to UserInfo class
+                user_info.setPassword(charSequence.toString());
             }
 
             @Override
@@ -117,7 +124,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mFNameField = v.findViewById(R.id.host_edit_text);
+        mFNameField = v.findViewById(R.id.fname_edit_text);
         mFNameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -126,8 +133,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setFName(s.toString());
+                // Save new info to UserInfo class
+                user_info.setFirstName(charSequence.toString());
             }
 
             @Override
@@ -135,7 +142,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mLNameField = v.findViewById(R.id.host_edit_text);
+        mLNameField = v.findViewById(R.id.lname_edit_text);
         mLNameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -144,8 +151,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setLName(s.toString());
+                // Save new info to UserInfo class
+                user_info.setLast_name(charSequence.toString());
             }
 
             @Override
@@ -153,7 +160,7 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
-        mEmailField = v.findViewById(R.id.host_edit_text);
+        mEmailField = v.findViewById(R.id.email_edit_text);
         mEmailField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -162,8 +169,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // I need a class to store all of this info;
-                // class.setEmail(s.toString());
+                // Save new info to UserInfo class
+                user_info.setEmail(charSequence.toString());
             }
 
             @Override
@@ -171,33 +178,34 @@ public class LoginFragment extends Fragment {
                 // This space is intentionally left blank
             }
         });
+        mGenderButton = v.findViewById(R.id.gender_radio_group);
+        mGenderButton.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == R.id.male_radio_button) {
+                    user_info.setGender("m");
+                } else if (i == R.id.female_radio_button) {
+                    user_info.setGender("f");
+                }
+            }
+        });
+        mRegisterButton = v.findViewById(R.id.register_button);
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check for valid input
 
+            }
+        });
+        mLoginButton = v.findViewById(R.id.login_button);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Does nothing yet... TODO
+            }
+        });
 
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -213,5 +221,123 @@ public class LoginFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+// INNER-CLASSES
+    private class UserInfo {
+    // MEMBERS
+        private String mServerHost;
+        String getServerHost() {
+            return mServerHost;
+        }
+        void setServerHost(String ServerHost) {
+            this.mServerHost = ServerHost;
+        }
+
+        private String mServerPort;
+        String getServerPort() {
+            return mServerPort;
+        }
+        void setServerPort(String ServerPort) {
+            this.mServerPort = ServerPort;
+        }
+
+        private String mUsername;
+        String getUsername() {
+            return mUsername;
+        }
+        void setUsername(String Username) {
+            this.mUsername = Username;
+        }
+
+        private String mPassword;
+        String getPassword() {
+            return mPassword;
+        }
+        void setPassword(String Password) {
+            this.mPassword = Password;
+        }
+
+        private String mFirstName;
+        String getFirstName() {
+            return mFirstName;
+        }
+        void setFirstName(String FirstName) {
+            this.mFirstName = FirstName;
+        }
+
+        private String mLastName;
+        String getLast_name() {
+            return mLastName;
+        }
+        void setLast_name(String LastName) {
+            this.mLastName = LastName;
+        }
+
+        private String mEmail;
+        String getEmail() {
+            return mEmail;
+        }
+        void setEmail(String Email) {
+            this.mEmail = Email;
+        }
+
+        private String mGender;
+        String getGender() {
+            return mGender;
+        }
+        void setGender(String Gender) {
+            this.mGender = Gender;
+        }
+
+
+    // METHODS
+        public UserInfo() {}
+
+        public boolean isServerInputValid() {
+            final int MAX_PORT_NUM = 65535;
+            final int MIN_PORT_NUM = 1;
+
+            if(mServerHost == null || mServerPort == null) return false;
+            if(mServerHost.equals("") || mServerPort.equals("")) return false;
+
+            // Check host name
+            if(!mServerHost.equals("localhost")) {
+                // TODO check for match against regex for hosts
+            }
+
+            // Check port number
+            try {
+                int i = Integer.parseInt(mServerPort);
+                if (i > MAX_PORT_NUM || i < MIN_PORT_NUM) return false;
+            } catch(NumberFormatException e) {
+                return false;
+            }
+
+            // All tests passed
+            return true;
+        }
+
+        public boolean isLoginInputValid() {
+            if(mUsername == null || mPassword == null) return false;
+
+            // TODO add more tests
+            // TODO add auth token?
+
+            // All tests passed
+            return true;
+        }
+
+        public boolean isRegisterInputValid() {
+            if(mUsername == null || mPassword == null || mFirstName == null || mLastName == null ||
+                    mEmail == null || mGender == null) return false;
+            if(mUsername.equals("") || mPassword.equals("") || mFirstName.equals("") ||
+                    mLastName.equals("") || mEmail.equals("") || mGender.equals("")) return false;
+
+            // TODO add more tests
+
+            // All tests passed
+            return true;
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.ploderup.familymap;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,30 +18,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_main);
 
-        // set member IDs
-        mRegisterButton = (Button) findViewById(R.id.register_button);
-        mLoginButton = (Button) findViewById(R.id.login_button);
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        // set listeners
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO setup listener activity
-                Toast.makeText(MainActivity.this, R.string.register_successful_toast,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO setup listener activity
-                Toast.makeText(MainActivity.this, R.string.login_successful_toast,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(fragment == null) {
+            fragment = new LoginFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        }
+
     }
 
     /**
