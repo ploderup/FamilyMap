@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">FamilyMap</string>
+
+    <!--Login Fragment -->
+    <string name="host_field">Server Host:</string>
+    <string name="port_field">Server Port:</string>
+    <string name="username_field">Username:</string>
+    <string name="password_field">Password:</string>
+    <string name="fname_field">First Name:</string>
+    <string name="lname_field">Last Name:</string>
+    <string name="email_field">Email:</string>
+    <string name="gender_field">Gender:</string>
+    <string name="select_male">Male</string>
+    <string name="select_female">Female</string>
+    <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
 </resources>
