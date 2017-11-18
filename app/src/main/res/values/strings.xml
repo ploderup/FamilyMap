@@ -14,4 +14,8 @@
     <string name="select_female">Female</string>
     <string name="register_button">Register</string>
     <string name="login_button">Login</string>
+    <string name="register_successful_toast">Registration succeeded!</string>
+    <string name="register_failed_toast">Registration failed!</string>
+    <string name="login_successful_toast">Login successful!</string>
+    <string name="login_failed_toast">Login failed!</string>
 </resources>

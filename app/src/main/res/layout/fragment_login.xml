@@ -1,182 +1,167 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".LoginFragment">
+    android:layout_height="match_parent">
 
-    <GridLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:rowCount="8"
-        android:columnCount="2"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:useDefaultMargins="false">
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/host_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/hostTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="8"
+            android:columnCount="2"
+            android:verticalSpacing="0dp"
+            android:horizontalSpacing="0dp"
+            android:useDefaultMargins="false">
 
-        <EditText
-            android:inputType="numberDecimal"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/hostEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/host_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/port_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/portTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/host_edit_text"
+                android:inputType="phone"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_gravity="start|fill"
+                android:layout_margin="0dp"/>
 
-        <EditText
-            android:inputType="number"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/portEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/port_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp"/>
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/username_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/usernameTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/port_edit_text"
+                android:inputType="number"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="0dp"/>
 
-        <EditText
-            android:inputType="text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/usernameEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/username_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/password_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/passwordTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/username_edit_text"
+                android:inputType="text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="0dp" />
 
-        <EditText
-            android:inputType="textPassword"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/passwordEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/password_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/fname_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/firstNameTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/password_edit_text"
+                android:inputType="textPassword"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="0dp" />
 
-        <EditText
-            android:inputType="text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/firstNameEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/fname_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/lname_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/lastNameTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/fname_edit_text"
+                android:inputType="text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="0dp" />
 
-        <EditText
-            android:inputType="text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/lastNameEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/lname_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/email_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/emailTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/lname_edit_text"
+                android:inputType="text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="0dp" />
 
-        <EditText
-            android:inputType="textEmailAddress"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="start|fill"
-            android:id="@+id/emailEditText"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/email_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/gender_field"
-            android:layout_gravity="end|center_vertical"
-            android:id="@+id/genderTextView"
-            android:layout_margin="0dp"
-            android:padding="0dp"/>
+            <EditText android:id="@+id/email_edit_text"
+                android:inputType="textEmailAddress"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="start|fill"
+                android:layout_margin="0dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp" />
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/gender_field"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="0dp" />
+
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton android:id="@+id/male_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_male" />
+
+                <RadioButton android:id="@+id/female_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_female" />
+            </RadioGroup>
+
+        </GridLayout>
 
         <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="start|fill"
-            android:layout_margin="0dp"
-            android:padding="0dp">
+            android:layout_gravity="center_horizontal">
 
-            <RadioButton
+            <Button android:id="@+id/register_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_male"/>
+                android:text="@string/register_button" />
 
-            <RadioButton
+            <Button android:id="@+id/login_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_female"/>
+                android:text="@string/login_button" />
 
         </LinearLayout>
 
-    </GridLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/registerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/register_button"/>
-
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_button"/>
-
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

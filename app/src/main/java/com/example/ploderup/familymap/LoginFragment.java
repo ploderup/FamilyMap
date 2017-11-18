@@ -4,66 +4,176 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.net.HttpURLConnection;
+
 public class LoginFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+// MEMBERS
+    private EditText mHostField;
+    private EditText mPortField;
+    private EditText mUsernameField;
+    private EditText mPasswordField;
+    private EditText mFNameField;
+    private EditText mLNameField;
+    private EditText mEmailField;
+    // private RadioGroup mGenderSelection;
+    private Button mRegisterButton;
+    private Button mLoginButton;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
+// METHODS
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
+     * Required empty public constructor.
      */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public LoginFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        // Inflate the fragment's layout
+        View v = inflater.inflate(R.layout.fragment_login, container, false);
+
+        // Wire-up all widgets
+        mHostField = v.findViewById(R.id.host_edit_text);
+        mHostField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setHost(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mPortField = v.findViewById(R.id.host_edit_text);
+        mPortField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setPort(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mUsernameField = v.findViewById(R.id.host_edit_text);
+        mUsernameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setUsername(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mPasswordField = v.findViewById(R.id.host_edit_text);
+        mPasswordField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setPassword(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mFNameField = v.findViewById(R.id.host_edit_text);
+        mFNameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setFName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mLNameField = v.findViewById(R.id.host_edit_text);
+        mLNameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setLName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+        mEmailField = v.findViewById(R.id.host_edit_text);
+        mEmailField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // This space is intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // I need a class to store all of this info;
+                // class.setEmail(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This space is intentionally left blank
+            }
+        });
+
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
