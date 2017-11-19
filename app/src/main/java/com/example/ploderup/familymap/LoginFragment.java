@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 
@@ -201,7 +202,10 @@ public class LoginFragment extends Fragment {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Does nothing yet... TODO
+                // Is the input valid?
+                if(user_info.isServerInfoValid() && user_info.isLoginInfoValid()) {
+                    Toast.makeText(LoginFragment.this, R.string.login_successful_toast, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -294,7 +298,7 @@ public class LoginFragment extends Fragment {
     // METHODS
         public UserInfo() {}
 
-        public boolean isServerInputValid() {
+        public boolean isServerInfoValid() {
             final int MAX_PORT_NUM = 65535;
             final int MIN_PORT_NUM = 1;
 
@@ -303,7 +307,9 @@ public class LoginFragment extends Fragment {
 
             // Check host name
             if(!mServerHost.equals("localhost")) {
-                // TODO check for match against regex for hosts
+                // For the sake of this lab, if the name isn't localhost, it should match the
+                // following regular expression:
+                if(!mServerHost.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]")) return false;
             }
 
             // Check port number
@@ -318,23 +324,23 @@ public class LoginFragment extends Fragment {
             return true;
         }
 
-        public boolean isLoginInputValid() {
+        public boolean isLoginInfoValid() {
             if(mUsername == null || mPassword == null) return false;
+            if(mUsername.equals("") || mPassword.equals("")) return false;
 
-            // TODO add more tests
-            // TODO add auth token?
+            // The need for other tests might arise later
 
             // All tests passed
             return true;
         }
 
-        public boolean isRegisterInputValid() {
+        public boolean isRegisterInfoValid() {
             if(mUsername == null || mPassword == null || mFirstName == null || mLastName == null ||
                     mEmail == null || mGender == null) return false;
             if(mUsername.equals("") || mPassword.equals("") || mFirstName.equals("") ||
                     mLastName.equals("") || mEmail.equals("") || mGender.equals("")) return false;
 
-            // TODO add more tests
+            // The need for other tests might arise later
 
             // All tests passed
             return true;
