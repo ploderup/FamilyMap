@@ -194,18 +194,36 @@ public class LoginFragment extends Fragment {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check for valid input
-
+                if(user_info.isServerInfoValid()) {
+                    if(user_info.isRegisterInfoValid()) {
+                        Toast.makeText(getActivity(), R.string.register_successful_toast,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.invalid_register_toast,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
         mLoginButton = v.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Is the input valid?
-                if(user_info.isServerInfoValid() && user_info.isLoginInfoValid()) {
-                    Toast.makeText(LoginFragment.this, R.string.login_successful_toast, Toast.LENGTH_SHORT).show();
+            if(user_info.isServerInfoValid()) {
+                if(user_info.isLoginInfoValid()) {
+                    Toast.makeText(getActivity(), R.string.login_successful_toast,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.invalid_login_toast, Toast.LENGTH_SHORT)
+                            .show();
                 }
+            } else {
+                Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
+                        .show();
+            }
             }
         });
 
@@ -307,9 +325,9 @@ public class LoginFragment extends Fragment {
 
             // Check host name
             if(!mServerHost.equals("localhost")) {
-                // For the sake of this lab, if the name isn't localhost, it should match the
+                // For the sake of this lab, if the name isn't "localhost", it should match the
                 // following regular expression:
-                if(!mServerHost.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]")) return false;
+                if(!mServerHost.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+")) return false;
             }
 
             // Check port number
@@ -340,7 +358,11 @@ public class LoginFragment extends Fragment {
             if(mUsername.equals("") || mPassword.equals("") || mFirstName.equals("") ||
                     mLastName.equals("") || mEmail.equals("") || mGender.equals("")) return false;
 
-            // The need for other tests might arise later
+            // Check email
+            if(!mEmail.matches("[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+")) return false;
+
+            // Check gender
+            if(mGender != "m" && mGender != "f") return false;
 
             // All tests passed
             return true;

@@ -18,4 +18,7 @@
     <string name="register_failed_toast">Registration failed!</string>
     <string name="login_successful_toast">Login successful!</string>
     <string name="login_failed_toast">Login failed!</string>
+    <string name="invalid_server_toast">Please enter valid server information.</string>
+    <string name="invalid_login_toast">Please enter a valid username and password.</string>
+    <string name="invalid_register_toast">Please enter valid registration information.</string>
 </resources>
