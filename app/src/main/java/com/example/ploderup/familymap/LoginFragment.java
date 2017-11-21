@@ -15,7 +15,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LoginFragment extends Fragment {
 // MEMBERS
@@ -196,8 +199,9 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 if(user_info.isServerInfoValid()) {
                     if(user_info.isRegisterInfoValid()) {
-                        Toast.makeText(getActivity(), R.string.register_successful_toast,
-                                Toast.LENGTH_SHORT).show();
+                        // Attempt to register user
+
+
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_register_toast,
                                 Toast.LENGTH_SHORT).show();
@@ -212,18 +216,19 @@ public class LoginFragment extends Fragment {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if(user_info.isServerInfoValid()) {
-                if(user_info.isLoginInfoValid()) {
-                    Toast.makeText(getActivity(), R.string.login_successful_toast,
-                            Toast.LENGTH_SHORT).show();
+                if(user_info.isServerInfoValid()) {
+                    if(user_info.isLoginInfoValid()) {
+                        // Attempt to log user in
+
+
+                    } else {
+                        Toast.makeText(getActivity(), R.string.invalid_login_toast, Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 } else {
-                    Toast.makeText(getActivity(), R.string.invalid_login_toast, Toast.LENGTH_SHORT)
+                    Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
                             .show();
                 }
-            } else {
-                Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
-                        .show();
-            }
             }
         });
 
@@ -362,10 +367,46 @@ public class LoginFragment extends Fragment {
             if(!mEmail.matches("[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+")) return false;
 
             // Check gender
-            if(mGender != "m" && mGender != "f") return false;
+            if(!mGender.equals("m") && !mGender.equals("f")) return false;
 
             // All tests passed
             return true;
+        }
+    }
+
+    private class RegisterTask extends AsyncTask<> {
+
+    }
+
+    /**
+     * LOGIN TASK
+     * Using the username and password provided, this class is used to log the user in to the
+     * server.
+     */
+    private class LoginTask extends AsyncTask<null, null, null> {
+        @Override
+        public void doInBackground() {
+            URL server_url;
+            HttpURLConnection url_connection;
+
+            try {
+                // Build URL from user input
+                server_url = new URL("http://" + user_info.getServerHost() + ":" +
+                        user_info.getServerPort() + R.string.login_url);
+
+                url_connection = (HttpURLConnection) server_url.openConnection();
+
+
+            } catch(MalformedURLException e) {
+
+            } catch(IOException e) {
+
+            }
+        }
+
+        @Override
+        public void onPostExecute(Result) {
+            // return result in json?
         }
     }
 }
