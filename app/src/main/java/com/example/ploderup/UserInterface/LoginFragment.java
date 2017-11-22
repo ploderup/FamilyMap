@@ -16,6 +16,13 @@ import android.widget.Toast;
 
 import com.example.ploderup.ServerProxy.ServerProxy;
 
+import java.util.ArrayList;
+
+import Facade.Result.LoginResult;
+import Facade.Result.PersonResult;
+import Facade.Result.RegisterResult;
+import Model.Person;
+
 public class LoginFragment extends Fragment {
 // MEMBERS
     private final String TAG = "LoginFragment";
@@ -362,14 +369,38 @@ public class LoginFragment extends Fragment {
     private class RegisterTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
+            RegisterResult register_result;
+
             // Create URL from user-provided server host name and port number
             final String URL_PREFIX = "http://" + user_info.getServerHost() + ":" +
                     user_info.getServerPort();
 
             // Try to register user through server proxy
-            return ServerProxy.registerUser(URL_PREFIX, user_info.getUsername(),
+            register_result = ServerProxy.registerUser(URL_PREFIX, user_info.getUsername(),
                     user_info.getPassword(), user_info.getFirstName(), user_info.getLast_name(),
                     user_info.getEmail(), user_info.getGender());
+
+            // Was registration successful?
+            if(register_result != null) {
+                ArrayList<Person> family_tree;
+
+                // Update the data cache with the result
+                ServerProxy.DataCache.setAuthToken(register_result.getToken());
+                ServerProxy.DataCache.setUsername(register_result.getUsername());
+                ServerProxy.DataCache.setRootPersonID(register_result.getPersonID());
+
+//                // Retrieve newly generated family tree
+//                family_tree = ServerProxy.getPerson(URL_PREFIX)
+//
+//                // Update the data cache with the new tree
+//                ServerProxy.DataCache.setFamilyTree();
+
+                return true;
+
+            // Registration failed
+            } else {
+                return false;
+            }
         }
 
         @Override
@@ -387,13 +418,31 @@ public class LoginFragment extends Fragment {
     private class LoginTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
+            LoginResult login_result;
+
             // Create URL from user-provided server host name and port number
             final String URL_PREFIX = "http://" + user_info.getServerHost() + ":" +
                     user_info.getServerPort();
 
             // Try to log user in through server proxy
-            return ServerProxy
+            login_result = ServerProxy
                     .loginUser(URL_PREFIX, user_info.getUsername(), user_info.getPassword());
+
+            // Was the registration successful?
+            if(login_result != null) {
+                // Update the data cache with the result
+                ServerProxy.DataCache.setAuthToken(login_result.getToken());
+                ServerProxy.DataCache.setUsername(login_result.getUsername());
+                ServerProxy.DataCache.setRootPersonID(login_result.getPersonID());
+
+                // Retrieve the
+
+                return true;
+
+            // Registration failed
+            } else {
+                return false;
+            }
         }
 
         @Override

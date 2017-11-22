@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FamilyMap</string>
 
-    <!--Login Fragment -->
+    <!--Login Fragment-->
     <string name="host_field">Server Host:</string>
     <string name="port_field">Server Port:</string>
     <string name="username_field">Username:</string>

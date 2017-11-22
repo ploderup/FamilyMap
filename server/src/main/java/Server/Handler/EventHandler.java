@@ -93,13 +93,13 @@ public class EventHandler implements HttpHandler {
         }
     }
 
-        /**
-         * STRING TO STREAM:
-         * Writes a string into an output stream.
-         *
-         * @param str, a non-empty string
-         * @param os, an instantiated output stream object
-         */
+    /**
+     * STRING TO STREAM:
+     * Writes a string into an output stream.
+     *
+     * @param str, a non-empty string
+     * @param os, an instantiated output stream object
+     */
     private void stringToStream(String str, OutputStream os) throws IOException {
         OutputStreamWriter sw = new OutputStreamWriter(os);
         sw.write(str);
