@@ -1,24 +1,20 @@
-package com.example.ploderup.familymap;
+package com.example.ploderup.UserInterface;
 
-import android.content.Context;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.example.ploderup.ServerProxy.ServerProxy;
 
 public class LoginFragment extends Fragment {
 // MEMBERS
@@ -200,7 +196,7 @@ public class LoginFragment extends Fragment {
                 if(user_info.isServerInfoValid()) {
                     if(user_info.isRegisterInfoValid()) {
                         // Attempt to register user
-
+                        new RegisterTask().execute();
 
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_register_toast,
@@ -218,8 +214,8 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 if(user_info.isServerInfoValid()) {
                     if(user_info.isLoginInfoValid()) {
-                        // Attempt to log user in
-
+                        // Attempt to log the user in
+                        new LoginTask().execute();
 
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_login_toast, Toast.LENGTH_SHORT)
@@ -232,22 +228,11 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        return v;
-    }
+        // Don't automatically open the keyboard
+        getActivity().getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        return v;
     }
 
 // INNER-CLASSES
@@ -374,39 +359,52 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private class RegisterTask extends AsyncTask<> {
-
-    }
-
-    /**
-     * LOGIN TASK
-     * Using the username and password provided, this class is used to log the user in to the
-     * server.
-     */
-    private class LoginTask extends AsyncTask<null, null, null> {
+    private class RegisterTask extends AsyncTask<Void, Void, Boolean> {
         @Override
-        public void doInBackground() {
-            URL server_url;
-            HttpURLConnection url_connection;
+        protected Boolean doInBackground(Void... params) {
+            // Create URL from user-provided server host name and port number
+            final String URL_PREFIX = "http://" + user_info.getServerHost() + ":" +
+                    user_info.getServerPort();
 
-            try {
-                // Build URL from user input
-                server_url = new URL("http://" + user_info.getServerHost() + ":" +
-                        user_info.getServerPort() + R.string.login_url);
-
-                url_connection = (HttpURLConnection) server_url.openConnection();
-
-
-            } catch(MalformedURLException e) {
-
-            } catch(IOException e) {
-
-            }
+            // Try to register user through server proxy
+            return ServerProxy.registerUser(URL_PREFIX, user_info.getUsername(),
+                    user_info.getPassword(), user_info.getFirstName(), user_info.getLast_name(),
+                    user_info.getEmail(), user_info.getGender());
         }
 
         @Override
-        public void onPostExecute(Result) {
-            // return result in json?
+        protected void onPostExecute(Boolean result) {
+            // Was the registration successful?
+            if(result)
+                Toast.makeText(getActivity(), R.string.register_successful_toast,
+                        Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getActivity(), R.string.register_failed_toast, Toast.LENGTH_SHORT)
+                        .show();
+        }
+    }
+
+    private class LoginTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // Create URL from user-provided server host name and port number
+            final String URL_PREFIX = "http://" + user_info.getServerHost() + ":" +
+                    user_info.getServerPort();
+
+            // Try to log user in through server proxy
+            return ServerProxy
+                    .loginUser(URL_PREFIX, user_info.getUsername(), user_info.getPassword());
+        }
+
+        @Override
+        public void onPostExecute(Boolean result) {
+            // Was the login successful?
+            if(result)
+                Toast.makeText(getActivity(), R.string.login_successful_toast, Toast.LENGTH_SHORT)
+                        .show();
+            else
+                Toast.makeText(getActivity(), R.string.login_failed_toast, Toast.LENGTH_SHORT)
+                        .show();
         }
     }
 }

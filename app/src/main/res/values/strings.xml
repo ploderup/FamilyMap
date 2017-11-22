@@ -23,4 +23,5 @@
     <string name="invalid_register_toast">Please enter valid registration information.</string>
     <string name="register_url">/user/register</string>
     <string name="login_url">/user/login</string>
+    <string name="title_activity_person">PersonActivity</string>
 </resources>

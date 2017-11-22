@@ -1,4 +1,4 @@
-package com.example.ploderup.familymap;
+package com.example.ploderup.UserInterface;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

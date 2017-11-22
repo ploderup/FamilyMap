@@ -1,4 +1,4 @@
-package com.example.ploderup.familymap;
+package com.example.ploderup.UserInterface;
 
 import org.junit.Test;
 
