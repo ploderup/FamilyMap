@@ -52,6 +52,7 @@ public class DefaultHandler implements HttpHandler {
 
                 // complete exchange
                 response_body.close();
+                System.out.println();
             }
 
         } catch(Exception e) {

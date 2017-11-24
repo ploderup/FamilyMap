@@ -55,13 +55,16 @@ public class ServerProxy {
      * @return whether the registration was successful or not
      */
     public static RegisterResult registerUser(String url_prefix, String username, String password,
-                                    String first_name, String last_name, String email,
-                                    String gender) {
+                                              String first_name, String last_name, String email,
+                                              String gender) {
+        Log.d(TAG, "ServerProxy(" + url_prefix + ", " + username + ", " + password + ", " +
+                first_name + ", " + last_name + ", " + email + ", " + gender + ");");
         String request_body;
 
         // Create body for HTTP post request
         request_body = new Gson().toJson(new RegisterRequest(username, password, email, first_name,
                 last_name, gender));
+        Log.d(TAG, request_body);
 
         // Post to the server
         return (RegisterResult) postToServer(url_prefix, "/user/register", null, request_body,
@@ -82,28 +85,41 @@ public class ServerProxy {
      */
     private static Object postToServer(String url_prefix, String api_url, String auth_token,
                                        String request_body, Class<?> result_type) {
+        Log.d(TAG, "ServerProxy.postToServer(" + url_prefix + ", " + api_url + ", " + auth_token +
+                ", " + request_body + ", " + result_type + ");");
         Object post_result = null;
 
         try {
             HttpURLConnection url_connection;
 
             // Create a new HTTP connection
+            Log.d(TAG, "About to create a new HTTP connection");
             url_connection = (HttpURLConnection) new URL(url_prefix + api_url).openConnection();
 
             // Setup the connection
+            Log.d(TAG, "Setting up the connection");
             url_connection.setRequestMethod(HTTP_POST);
             url_connection.setDoOutput(true);
+            Log.d(TAG, "output, " + url_connection.getDoInput());
+            url_connection.setDoInput(true);
+            Log.d(TAG, "output, " + url_connection.getDoInput());
 
             // Is there an authentication token to add?
+            Log.d(TAG, "Checking for authentication token");
             if (auth_token != null) url_connection.addRequestProperty("Authorization", auth_token);
 
-            // Make the connection
-            url_connection.connect();
-
             // Is there any body data to add?
+            Log.d(TAG, "Checking for body data to add");
             if(request_body != null) stringToStream(request_body, url_connection.getOutputStream());
+            Log.d(TAG, "Done w/ body data");
+
+            // Make the connection
+            Log.d(TAG, "Opening the connection");
+            url_connection.connect();   // THIS THROWS IOEXCEPTION
+            Log.d(TAG, "The connection to the server is now open.");
 
             // Was the connection successful?
+            Log.d(TAG, "What was the connection code?");
             if(url_connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 // Was a response body returned?
                 if(url_connection.getContentLength() > 0) {
@@ -115,17 +131,21 @@ public class ServerProxy {
 
                 } else {
                     Log.d(TAG, "The response from the server to postToServer() was empty.");
+                    Log.d(TAG, "LENGTH: " + url_connection.getContentLength());
                 }
             } else {
                 Log.e(TAG, "Code other that HTTP_OK given to postToServer().");
+                Log.e(TAG, "CODE: " + url_connection.getResponseCode());
             }
 
         } catch(MalformedURLException e) {
             Log.e(TAG, "MalformedURLException encountered. See postToServer().");
         } catch(IOException e) {
             Log.e(TAG, "IOException encountered. See postToServer().");
+            Log.e(TAG, e.getMessage());
         } catch(Exception e) {
             Log.e(TAG, "Exception encountered. See postToServer().");
+            Log.e(TAG, e.getMessage());
         }
 
         return post_result;
