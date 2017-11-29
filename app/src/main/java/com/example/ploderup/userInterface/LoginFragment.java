@@ -17,8 +17,12 @@ import android.widget.Toast;
 
 import com.example.ploderup.serverProxy.ServerProxy;
 
+import java.util.ArrayList;
+
 import Facade.Result.LoginResult;
+import Facade.Result.PersonResult;
 import Facade.Result.RegisterResult;
+import Model.Person;
 
 public class LoginFragment extends Fragment {
 // MEMBERS
@@ -202,9 +206,6 @@ public class LoginFragment extends Fragment {
                         // Attempt to register user
                         new RegisterTask().execute();
 
-                        // Update the user's family tree
-                        new UpdateCacheTask().execute();
-
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_register_toast,
                                 Toast.LENGTH_SHORT).show();
@@ -224,9 +225,6 @@ public class LoginFragment extends Fragment {
                     if(user_info.isLoginInfoValid()) {
                         // Attempt to log the user in
                         new LoginTask().execute();
-
-                        // Update the user's family tree
-                        new UpdateCacheTask().execute();
 
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_login_toast,
@@ -393,18 +391,26 @@ public class LoginFragment extends Fragment {
                 Log.d(TAG, "Checking whether result returned an error");
                 if(register_result.getMessage() == null) {
                     Log.d(TAG, "No error was returned");
-//                  ArrayList<Person> family_tree;
+                    PersonResult person_result;
+                    ArrayList<Person> family_tree;
 
                     // Update the data cache with the result
                     ServerProxy.DataCache.setAuthToken(register_result.getToken());
                     ServerProxy.DataCache.setUsername(register_result.getUsername());
                     ServerProxy.DataCache.setRootPersonID(register_result.getPersonID());
 
-//                // Retrieve newly generated family tree
-//                family_tree = ServerProxy.getPerson(URL_PREFIX)
-//
-//                // Update the data cache with the new tree
-//                ServerProxy.DataCache.setFamilyTree();
+                    // Retrieve newly generated family tree
+                    Log.d(TAG, "Retrieving newly generated family tree");
+                    person_result = ServerProxy.getFamilyTree(URL_PREFIX);
+                    Log.d(TAG, "Checking if result was null");
+                    if(person_result == null) return false;
+                    family_tree = person_result.getData();
+                    Log.d(TAG, "Checking if tree is null");
+                    if(family_tree == null) return false;
+
+                    // Update the data cache with the new tree
+                    ServerProxy.DataCache.setFamilyTree(family_tree);
+                    ServerProxy.DataCache.updateFullName();
 
                     return true;
 
@@ -426,8 +432,8 @@ public class LoginFragment extends Fragment {
             // Was the registration successful?
             if(result)
                 Toast.makeText(getActivity(),
-                        ServerProxy.DataCache.getFullName() + " " +
-                                R.string.register_successful_toast,
+                        getString(R.string.register_successful_toast,
+                                ServerProxy.DataCache.getFullName()),
                         Toast.LENGTH_SHORT)
                         .show();
             else
@@ -455,18 +461,26 @@ public class LoginFragment extends Fragment {
                 Log.d(TAG, "Checking whether result returned an error");
                 if(login_result.getMessage() == null) {
                     Log.d(TAG, "No error was returned");
-//                  ArrayList<Person> family_tree;
+                    PersonResult person_result;
+                    ArrayList<Person> family_tree;
 
                     // Update the data cache with the result
                     ServerProxy.DataCache.setAuthToken(login_result.getToken());
                     ServerProxy.DataCache.setUsername(login_result.getUsername());
                     ServerProxy.DataCache.setRootPersonID(login_result.getPersonID());
 
-//                // Retrieve newly generated family tree
-//                family_tree = ServerProxy.getPerson(URL_PREFIX)
-//
-//                // Update the data cache with the new tree
-//                ServerProxy.DataCache.setFamilyTree();
+                    // Retrieve newly generated family tree
+                    Log.d(TAG, "Retrieving newly generated family tree");
+                    person_result = ServerProxy.getFamilyTree(URL_PREFIX);
+                    Log.d(TAG, "Checking if result was null");
+                    if(person_result == null) return false;
+                    family_tree = person_result.getData();
+                    Log.d(TAG, "Checking if tree is null");
+                    if(family_tree == null) return false;
+
+                    // Update the data cache with the new tree
+                    ServerProxy.DataCache.setFamilyTree(family_tree);
+                    ServerProxy.DataCache.updateFullName();
 
                     return true;
 
@@ -488,25 +502,13 @@ public class LoginFragment extends Fragment {
             // Was the login successful?
             if(result)
                 Toast.makeText(getActivity(),
-                        ServerProxy.DataCache.getFullName() + " " + R.string.login_successful_toast,
+                        getString(R.string.login_successful_toast,
+                                ServerProxy.DataCache.getFullName()),
                         Toast.LENGTH_SHORT)
                         .show();
             else
                 Toast.makeText(getActivity(), R.string.login_failed_toast, Toast.LENGTH_SHORT)
                         .show();
         }
-    }
-
-    private class UpdateCacheTask extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-
-        }
-
     }
 }
