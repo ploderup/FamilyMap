@@ -1,6 +1,5 @@
 package Server;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class JSONEncoder {
@@ -19,10 +18,10 @@ public class JSONEncoder {
      * @see Facade.Result.RegisterResult;
      */
     public static String encodeObject(Object result) {
-        // create GSON object
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
         // convert result to JSON
-        return gson.toJson(result);
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .create()
+                .toJson(result);
     }
 }

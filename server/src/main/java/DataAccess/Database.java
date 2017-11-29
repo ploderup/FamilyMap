@@ -223,8 +223,8 @@ public class Database {
 
             // create user's person
             user = UserDAO.read(username);
-            person = new Person(username, user.getFirstName(), user.getLastName(), user.getGender());
-            user.setPersonID(person.getPersonID());
+            person = new Person(user.getPersonID(), username, user.getFirstName(),
+                    user.getLastName(), user.getGender(), null, null, null);
 
             // generate new tree
             num_people = PersonDAO.createRecursive(username, person, num_generations);

@@ -14,7 +14,7 @@ public class LoginResult {
         token           = tn;
         username        = un;
         person_id       = id;
-        error_message   = null;
+        message   = null;
     }
 
     /**
@@ -22,13 +22,13 @@ public class LoginResult {
      * Constructs an error-containing LoginResult object in the case of an error caught in the
      * LoginService.
      *
-     * @param em, a non-empty string describing the error
+     * @param msg, a non-empty string describing the error
      */
-    public LoginResult(String em) {
+    public LoginResult(String msg) {
         token           = null;
         username        = null;
         person_id       = null;
-        error_message   = em;
+        message         = msg;
     }
 
 
@@ -61,7 +61,7 @@ public class LoginResult {
      * ERROR MESSAGE:
      * A description of the error encountered.
      */
-    private String error_message;
-    public String getErrorMessage() { return error_message;}
-    public void setErrorMessage(String msg) { error_message = msg; }
+    private String message;
+    public String getMessage() { return message;}
+    public void setMessage(String msg) { message = msg; }
 }

@@ -62,7 +62,7 @@ public class LoginServiceTest {
         assertEquals(login_result.getToken(), null);
         assertEquals(login_result.getUsername(), null);
         assertEquals(login_result.getPersonID(), null);
-        assertNotEquals(login_result.getErrorMessage(), null);
+        assertNotEquals(login_result.getMessage(), null);
 
         // attempt valid login
         login_request = new LoginRequest("username", "password");
@@ -70,6 +70,6 @@ public class LoginServiceTest {
         assertNotEquals(login_result.getToken(), null);
         assertEquals(login_result.getUsername(), "username");
         assertNotEquals(login_result.getPersonID(), null);
-        assertEquals(login_result.getErrorMessage(), null);
+        assertEquals(login_result.getMessage(), null);
     }
 }
