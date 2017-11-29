@@ -187,6 +187,14 @@ public class ServerProxy {
         public static void setUsername(String username) { mUsername = username; }
 
         /**
+         * FULL NAME:
+         * The first and last name of the user currently logged in.
+         */
+        private static String mFullName;
+        public static String getFullName() { return mFullName; }
+        public static void setFullName(String full_name) { mFullName = full_name; }
+
+        /**
          * ROOT PERSON ID
          * The ID of the person object corresponding to the user currently logged in. Null until a
          * successful login has occurred.
@@ -206,7 +214,8 @@ public class ServerProxy {
 
         /**
          * FAMILY TREE
-         * The family tree of the currently logged in user. Null until a successful login has occured.
+         * The family tree of the currently logged in user. Null until a successful login has
+         * occurred.
          */
         private static ArrayList<Person> mFamilyTree;
         public static ArrayList<Person> getFamilyTree() { return mFamilyTree; }

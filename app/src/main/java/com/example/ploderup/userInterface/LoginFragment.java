@@ -202,12 +202,16 @@ public class LoginFragment extends Fragment {
                         // Attempt to register user
                         new RegisterTask().execute();
 
+                        // Update the user's family tree
+                        new UpdateCacheTask().execute();
+
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_register_toast,
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
+                    Toast.makeText(getActivity(), R.string.invalid_server_toast,
+                            Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -221,12 +225,17 @@ public class LoginFragment extends Fragment {
                         // Attempt to log the user in
                         new LoginTask().execute();
 
+                        // Update the user's family tree
+                        new UpdateCacheTask().execute();
+
                     } else {
-                        Toast.makeText(getActivity(), R.string.invalid_login_toast, Toast.LENGTH_SHORT)
+                        Toast.makeText(getActivity(), R.string.invalid_login_toast,
+                                Toast.LENGTH_SHORT)
                                 .show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.invalid_server_toast, Toast.LENGTH_SHORT)
+                    Toast.makeText(getActivity(), R.string.invalid_server_toast,
+                            Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -416,7 +425,11 @@ public class LoginFragment extends Fragment {
         protected void onPostExecute(Boolean result) {
             // Was the registration successful?
             if(result)
-                Toast.makeText(getActivity(), R.string.register_successful_toast, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),
+                        ServerProxy.DataCache.getFullName() + " " +
+                                R.string.register_successful_toast,
+                        Toast.LENGTH_SHORT)
+                        .show();
             else
                 Toast.makeText(getActivity(), R.string.register_failed_toast, Toast.LENGTH_SHORT).show();
         }
@@ -474,11 +487,26 @@ public class LoginFragment extends Fragment {
         public void onPostExecute(Boolean result) {
             // Was the login successful?
             if(result)
-                Toast.makeText(getActivity(), R.string.login_successful_toast, Toast.LENGTH_SHORT)
+                Toast.makeText(getActivity(),
+                        ServerProxy.DataCache.getFullName() + " " + R.string.login_successful_toast,
+                        Toast.LENGTH_SHORT)
                         .show();
             else
                 Toast.makeText(getActivity(), R.string.login_failed_toast, Toast.LENGTH_SHORT)
                         .show();
         }
+    }
+
+    private class UpdateCacheTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+        }
+
     }
 }
