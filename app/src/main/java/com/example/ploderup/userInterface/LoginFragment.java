@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.ploderup.serverProxy.ServerProxy;
+import com.example.ploderup.communication.ServerProxy;
 
 import java.util.ArrayList;
 
@@ -430,14 +430,19 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             // Was the registration successful?
-            if(result)
+            if(result) {
                 Toast.makeText(getActivity(),
                         getString(R.string.register_successful_toast,
                                 ServerProxy.DataCache.getFullName()),
                         Toast.LENGTH_SHORT)
                         .show();
-            else
+
+                // Transition to MapFragment
+                ServerProxy.setLoggedIn(true);
+
+            } else {
                 Toast.makeText(getActivity(), R.string.register_failed_toast, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -500,15 +505,19 @@ public class LoginFragment extends Fragment {
         @Override
         public void onPostExecute(Boolean result) {
             // Was the login successful?
-            if(result)
+            if(result) {
                 Toast.makeText(getActivity(),
                         getString(R.string.login_successful_toast,
                                 ServerProxy.DataCache.getFullName()),
                         Toast.LENGTH_SHORT)
                         .show();
-            else
-                Toast.makeText(getActivity(), R.string.login_failed_toast, Toast.LENGTH_SHORT)
-                        .show();
+
+                // Transition to MapFragment
+                ServerProxy.setLoggedIn(true);
+
+            } else {
+                Toast.makeText(getActivity(), R.string.login_failed_toast, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

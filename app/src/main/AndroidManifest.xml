@@ -20,16 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".PersonActivity"
-            android:label="@string/title_activity_person"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PersonActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".FilterActivity" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".MapActivity" />
     </application>
 
 </manifest>

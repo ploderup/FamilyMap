@@ -1,4 +1,5 @@
-package com.example.ploderup.serverProxy;
+package com.example.ploderup.communication;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
@@ -13,7 +14,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import Facade.Request.LoginRequest;
-import Facade.Request.PersonRequest;
 import Facade.Request.RegisterRequest;
 import Facade.Result.LoginResult;
 import Facade.Result.PersonResult;
@@ -25,6 +25,13 @@ public class ServerProxy {
     private static final String TAG = "ServerProxy";
     private static final String HTTP_GET = "GET";
     private static final String HTTP_POST = "POST";
+
+    /**
+     * Whether the user is logged in or not.
+     */
+    private static boolean mLoggedIn;
+    public static boolean getLoggedIn() { return mLoggedIn; }
+    public static void setLoggedIn(boolean logged_in) { mLoggedIn = logged_in; }
 
 // METHODS
     /**

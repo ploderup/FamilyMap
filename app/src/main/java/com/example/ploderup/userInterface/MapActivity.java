@@ -1,13 +1,15 @@
 package com.example.ploderup.userInterface;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MapActivity extends AppCompatActivity {
-
+public class MapActivity extends SingleFragmentActivity {
+    /**
+     * @see SingleFragmentActivity
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+    protected Fragment createFragment() {
+        return new MapFragment();
     }
 }
