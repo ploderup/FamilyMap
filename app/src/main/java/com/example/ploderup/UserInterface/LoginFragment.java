@@ -2,6 +2,7 @@ package com.example.ploderup.UserInterface;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,16 +25,6 @@ public class LoginFragment extends Fragment {
 // MEMBERS
     private final String TAG = "LoginFragment";
     private UserInfo mUserInfo;
-    private EditText mHostField;
-    private EditText mPortField;
-    private EditText mUsernameField;
-    private EditText mPasswordField;
-    private EditText mFNameField;
-    private EditText mLNameField;
-    private EditText mEmailField;
-    private RadioGroup mGenderButton;
-    private Button mRegisterButton;
-    private Button mLoginButton;
 
 // METHODS
     /**
@@ -50,6 +41,17 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        EditText mHostField;
+        EditText mPortField;
+        EditText mUsernameField;
+        EditText mPasswordField;
+        EditText mFNameField;
+        EditText mLNameField;
+        EditText mEmailField;
+        RadioGroup mGenderButton;
+        Button mRegisterButton;
+        Button mLoginButton;
+
         // Inflate the fragment's layout
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
@@ -201,19 +203,7 @@ public class LoginFragment extends Fragment {
                 if(mUserInfo.isServerInfoValid()) {
                     if(mUserInfo.isRegisterInfoValid()) {
                         // Attempt to register user
-                        new RegisterTask().execute();
-
-                        // Was the user registered?
-                        if (Settings.getInstance().getLoggedIn()) {
-                            Toast.makeText(getActivity(), getString(R
-                                    .string.register_successful_toast,
-                                    ServerProxy.DataCache.getFullName()), Toast.LENGTH_SHORT)
-                                    .show();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.register_failed_toast,
-                                    Toast.LENGTH_SHORT)
-                                    .show();
-                        }
+                        new RegisterTask((AppCompatActivity) getActivity()).execute();
 
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_register_toast,
@@ -233,18 +223,7 @@ public class LoginFragment extends Fragment {
                 if(mUserInfo.isServerInfoValid()) {
                     if(mUserInfo.isLoginInfoValid()) {
                         // Attempt to log the user in
-                        new LoginTask().execute();
-
-                        // Was the user registered?
-                        if (Settings.getInstance().getLoggedIn()) {
-                            Toast.makeText(getActivity(), getString(R.string.login_successful_toast,
-                                    ServerProxy.DataCache.getFullName()), Toast.LENGTH_SHORT)
-                                    .show();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.login_failed_toast,
-                                    Toast.LENGTH_SHORT)
-                                    .show();
-                        }
+                        new LoginTask((AppCompatActivity) getActivity()).execute();
 
                     } else {
                         Toast.makeText(getActivity(), R.string.invalid_login_toast,

@@ -1,11 +1,15 @@
 package com.example.ploderup.Communication;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.ploderup.Model.Settings;
 import com.example.ploderup.Model.UserInfo;
+import com.example.ploderup.UserInterface.MapFragment;
 import com.example.ploderup.UserInterface.R;
 
 import java.util.ArrayList;
@@ -17,8 +21,13 @@ import Model.Person;
 public class RegisterTask extends AsyncTask<Void, Void, Boolean> {
 // MEMBERS
     private final String TAG = "RegisterTask";
+    private AppCompatActivity mParentActivity;
 
 // METHODS
+    public RegisterTask(AppCompatActivity parent_activity) {
+        mParentActivity = parent_activity;
+    }
+
     @Override
     protected Boolean doInBackground(Void... params) {
         RegisterResult register_result;
@@ -84,12 +93,33 @@ public class RegisterTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        // Was the registration successful?
+        Log.d(TAG, "onPostExecute(" + result + ")");
+
+        // Was the login successful?
         if(result) {
+            // Set logged-in flag
             Settings.getInstance().setLoggedIn(true);
+
+            // Print toast to user
+            Toast.makeText(mParentActivity, mParentActivity.getString(
+                    R.string.register_successful_toast, ServerProxy.DataCache.getFullName()),
+                    Toast.LENGTH_SHORT)
+                    .show();
+
+            // Switch to MapFragment
+            mParentActivity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new MapFragment())
+                    .addToBackStack(null)
+                    .commit();
 
         } else {
             Settings.getInstance().setLoggedIn(false);
+
+            // Print toast to user
+            Toast.makeText(mParentActivity, R.string.register_failed_toast,
+                    Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }

@@ -25,13 +25,6 @@ public class ServerProxy {
     private static final String HTTP_GET = "GET";
     private static final String HTTP_POST = "POST";
 
-    /**
-     * Whether the user is logged in or not.
-     */
-    private static boolean mLoggedIn;
-    public static boolean getLoggedIn() { return mLoggedIn; }
-    public static void setLoggedIn(boolean logged_in) { mLoggedIn = logged_in; }
-
 // METHODS
     /**
      * LOGIN USER

@@ -1,11 +1,16 @@
 package com.example.ploderup.Communication;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.ploderup.Model.Settings;
 import com.example.ploderup.Model.UserInfo;
+import com.example.ploderup.UserInterface.MapFragment;
 import com.example.ploderup.UserInterface.R;
 
 import java.util.ArrayList;
@@ -17,6 +22,13 @@ import Model.Person;
 public class LoginTask extends AsyncTask<Void, Void, Boolean> {
 // MEMBERS
     private final String TAG = "LoginTask";
+    private AppCompatActivity mParentActivity;
+
+
+// METHODS
+    public LoginTask(AppCompatActivity parent_activity) {
+        mParentActivity = parent_activity;
+    }
 
     @Override
     protected Boolean doInBackground(Void... params) {
@@ -82,12 +94,33 @@ public class LoginTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     public void onPostExecute(Boolean result) {
+        Log.d(TAG, "onPostExecute(" + result + ")");
+
         // Was the login successful?
         if(result) {
+            // Set logged-in flag
             Settings.getInstance().setLoggedIn(true);
+
+            // Print toast to user
+            Toast.makeText(mParentActivity, mParentActivity.getString(
+                    R.string.login_successful_toast, ServerProxy.DataCache.getFullName()),
+                    Toast.LENGTH_SHORT)
+                    .show();
+
+            // Switch to MapFragment
+            mParentActivity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new MapFragment())
+                    .addToBackStack(null)
+                    .commit();
 
         } else {
             Settings.getInstance().setLoggedIn(false);
+
+            // Print toast to user
+            Toast.makeText(mParentActivity, R.string.login_failed_toast,
+                    Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }
