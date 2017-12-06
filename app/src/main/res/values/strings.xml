@@ -40,4 +40,5 @@
     <!--=====================-->
     <string name="go_back">Go Up</string>
     <string name="go_to_top">Go to Top</string>
+    <string name="title_activity_map_demo">Map</string>
 </resources>
