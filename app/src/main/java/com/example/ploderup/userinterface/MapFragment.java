@@ -1,5 +1,6 @@
 package com.example.ploderup.userinterface;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
+import com.example.ploderup.model.Settings;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,6 +25,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 // MEMBERS
     private final String TAG = "MapFragment";
     private GoogleMap mMap;
+    private LinearLayout mEventDetails;
 
 // METHODS
     /**
@@ -44,8 +48,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
-        Log.d(TAG, "We made it to this point!");
         mapFragment.getMapAsync(this);
+
+        // Wire-up all widgets
+        mEventDetails = v.findViewById(R.id.event_details);
+        mEventDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create PersonActivity to display information about person associated w/ event
+                getActivity().startActivity(new Intent(getActivity(), PersonActivity.class));
+            }
+        });
 
         return v;
     }
@@ -71,14 +84,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             switch(item.getItemId()) {
                 case R.id.filter_menu_item:
                     // Start a FilterActivity
+                    getActivity().startActivity(new Intent(getActivity(), FilterActivity.class));
                     break;
 
                 case R.id.search_menu_item:
                     // Start a SearchActivity
+                    getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
                     break;
 
                 case R.id.settings_menu_item:
                     // Start a SettingsActivity
+                    Log.d(TAG, "Starting SettingsActivity");
+                    getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));
                     break;
 
                 default:
@@ -103,7 +120,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        // TODO What do I return here?
         return false;
     }
 
@@ -113,6 +129,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap google_map) {
         mMap = google_map;
+
+        // Set-up the map
+        mMap.setMapType(Settings.getInstance().getMapType());
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        // TODO: Lay down event pins
+
+        // TODO: Draw map lines
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);

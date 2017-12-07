@@ -10,11 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SearchFragment extends Fragment {
-    // MEMBERS
-    private final String TAG = "SearchFragment";
+public class FilterFragment extends Fragment {
+// MEMBERS
+    private final String TAG = "FilterFragment";
 
-    // METHODS
+// METHODS
     @Override
     public void onCreate(Bundle saved_instance_state) {
         super.onCreate(saved_instance_state);
@@ -25,7 +25,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle saved_instance_state) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_search, container, false);
+        View v = inflater.inflate(R.layout.fragment_filter, container, false);
 
         // Wire-up all widgets
         // TODO

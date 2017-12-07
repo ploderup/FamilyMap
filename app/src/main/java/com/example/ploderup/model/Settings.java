@@ -1,5 +1,7 @@
 package com.example.ploderup.model;
 
+import static com.google.android.gms.maps.GoogleMap.*;
+
 /**
  * A storage class of values relating to settings for the FamilyMap app. See the default constructor
  * for default setting values.
@@ -20,7 +22,7 @@ public class Settings {
         mFamilyTreeLinesColor = BLUE;
         mSpouseLinesEnabled = false;
         mSpouseLinesColor = RED;
-        mMapType = MapType.normal;
+        mMapType = MAP_TYPE_NORMAL;
         mLoggedIn = false;
     }
     public static Settings getInstance() {
@@ -99,18 +101,13 @@ public class Settings {
     /**
      * The type of map to be displayed by MapFragment.
      */
-    private MapType mMapType;
-    public MapType getMapType() {
+    private int mMapType;
+    public int getMapType() {
         return mMapType;
     }
-    public void setMapType(MapType mMapType) {
+    public void setMapType(int mMapType) {
         this.mMapType = mMapType;
     }
-
-    /**
-     * An enumerated type for storage of map types.
-     */
-    public enum MapType { normal, hybrid, satellite, terrain }
 
     /**
      * Whether a user is logged in to the server or not.

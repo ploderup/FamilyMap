@@ -2,10 +2,15 @@ package com.example.ploderup.userinterface;
 
 import android.support.v4.app.Fragment;
 
+/**
+ * @see SingleFragmentActivity
+ */
 public class SearchActivity extends SingleFragmentActivity {
-    /**
-     * @see SingleFragmentActivity
-     */
+    @Override
+    protected String setTitle() {
+        return "FamilyMap | Search";
+    }
+
     @Override
     protected Fragment createFragment() {
         return new SearchFragment();

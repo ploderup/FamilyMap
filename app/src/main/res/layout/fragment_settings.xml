@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/life_story_lines_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/life_story_lines_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Spinner android:id="@+id/life_story_line_color_spinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+
+        <Switch android:id="@+id/life_story_line_color_switch"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/family_tree_lines_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/family_tree_lines_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Spinner android:id="@+id/family_tree_line_color_spinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+
+        <Switch android:id="@+id/family_tree_line_color_switch"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spouse_lines_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spouse_lines_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Spinner android:id="@+id/spouse_line_color_spinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+
+        <Switch android:id="@+id/spouse_line_color_switch"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_type_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_type_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Spinner android:id="@+id/map_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resync_data_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resync_data_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Button android:id="@+id/resync_data_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/resync_data_button"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout_option"
+                android:textColor="@color/solidBlack"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout_detail"
+                android:textColor="@color/textGray"
+                android:textSize="12sp"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <Button android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="35dp"
+            android:text="@string/logout_button"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/textGray"/>
+
+
+</LinearLayout>

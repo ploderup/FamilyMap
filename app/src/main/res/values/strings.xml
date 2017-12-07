@@ -28,16 +28,37 @@
     <string name="title_activity_person">PersonActivity</string>
     <string name="title_activity_settings">Settings</string>
 
+
+    <!--===================-->
+    <!-- Settings Fragment -->
+    <!--===================-->
+    <string name="life_story_lines_option">Life story lines</string>
+    <string name="life_story_lines_detail">Show life story lines</string>
+    <string name="family_tree_lines_option">Family tree lines</string>
+    <string name="family_tree_lines_detail">Show family tree lines</string>
+    <string name="spouse_lines_option">Spouse lines</string>
+    <string name="spouse_lines_detail">Show spouse lines</string>
+    <string name="map_type_option">Map type</string>
+    <string name="map_type_detail">Change the map\'s background</string>
+    <string name="resync_data_option">Re-sync data</string>
+    <string name="resync_data_detail">From the FamilyMap server</string>
+    <string name="resync_data_button">Re-sync</string>
+    <string name="logout_option">Logout</string>
+    <string name="logout_detail">Return to login screen</string>
+    <string name="logout_button">Logout</string>
+    <string-array name="line_color_array">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+    </string-array>
+
+
     <!--==============-->
-    <!-- Map Fragment -->
+    <!-- Menu Options -->
     <!--==============-->
     <string name="open_filter">Filter</string>
     <string name="open_search">Search</string>
     <string name="open_settings">Settings</string>
-
-    <!--=====================-->
-    <!-- All Other Fragments -->
-    <!--=====================-->
     <string name="go_back">Go Up</string>
     <string name="go_to_top">Go to Top</string>
     <string name="title_activity_map_demo">Map</string>
