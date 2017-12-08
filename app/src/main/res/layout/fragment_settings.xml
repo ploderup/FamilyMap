@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/life_story_lines_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -46,6 +46,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 
@@ -64,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/family_tree_lines_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -90,6 +91,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 
@@ -108,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/spouse_lines_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -134,6 +136,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 
@@ -152,7 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/map_type_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -173,6 +176,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 
@@ -191,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/resync_data_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -206,12 +210,14 @@
         <Button android:id="@+id/resync_data_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/resync_data_button"/>
+            android:text="@string/resync_data_button"
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 
@@ -230,7 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/logout_option"
-                android:textColor="@color/solidBlack"
+                android:textColor="@color/black"
                 android:textSize="15sp"/>
 
             <TextView
@@ -246,12 +252,14 @@
             android:layout_width="wrap_content"
             android:layout_weight="0"
             android:layout_height="35dp"
-            android:text="@string/logout_button"/>
+            android:text="@string/logout_button"
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/textGray"/>
 

@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/tools">
 
-    <item android:id="@+id/settings_menu_item"
-        android:title="@string/open_settings"
-        android:icon="@drawable/ic_menu_gear"
+    <item android:id="@+id/search_menu_item"
+        android:title="@string/open_search"
+        android:icon="@drawable/ic_menu_magnify"
         app:showAsAction="ifRoom|withText" />
 
     <item android:id="@+id/filter_menu_item"
@@ -12,9 +12,9 @@
         android:icon="@drawable/ic_menu_filter"
         app:showAsAction="ifRoom|withText" />
 
-    <item android:id="@+id/search_menu_item"
-        android:title="@string/open_search"
-        android:icon="@drawable/ic_menu_magnify"
+    <item android:id="@+id/settings_menu_item"
+        android:title="@string/open_settings"
+        android:icon="@drawable/ic_menu_gear"
         app:showAsAction="ifRoom|withText" />
 
 </menu>

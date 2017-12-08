@@ -9,18 +9,20 @@ import android.util.Log;
 import com.example.ploderup.model.Settings;
 
 public class MainActivity extends AppCompatActivity {
+// MEMBERS
+    private Settings mSettings = Settings.getInstance();
+
 // METHODS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate called");
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         // Is the user already logged in?
-        if(Settings.getInstance().getLoggedIn()) {
+        if(mSettings.getLoggedIn()) {
             // Open the map screen
             if (fragment == null) {
                 fragment = new MapFragment();

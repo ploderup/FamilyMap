@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 public class PersonActivity extends SingleFragmentActivity {
     @Override
     protected String setTitle() {
-        return "FamilyMap | Person Details";
+        return "Person Details";
     }
 
     @Override

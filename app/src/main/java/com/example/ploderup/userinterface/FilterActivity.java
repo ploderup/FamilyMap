@@ -10,7 +10,7 @@ import android.os.Bundle;
 public class FilterActivity extends SingleFragmentActivity {
     @Override
     protected String setTitle() {
-        return "FamilyMap | Filters";
+        return "Filters";
     }
 
     @Override

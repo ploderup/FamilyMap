@@ -34,23 +34,17 @@ public class FilterFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_fss, menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.back_menu_item:
-                // TODO: Go back
-                break;
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
 
             default:
                 Log.e(TAG, "Default (error) case reached at onOptionsItemSelected");
                 Log.e(TAG, "Item ID was " + Integer.toHexString(item.getItemId()));
         }
 
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 }

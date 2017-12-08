@@ -20,11 +20,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.ploderup.userinterface.PersonActivity" />
-        <activity android:name="com.example.ploderup.userinterface.SearchActivity" />
-        <activity android:name="com.example.ploderup.userinterface.FilterActivity" />
-        <activity android:name="com.example.ploderup.userinterface.SettingsActivity" />
-        <activity android:name="com.example.ploderup.userinterface.MapActivity" />
+        <activity android:name="com.example.ploderup.userinterface.PersonActivity">
+            android:parentActivityName="com.example.ploderup.userinterface.MainActivity"
+        </activity>
+        <activity android:name="com.example.ploderup.userinterface.SearchActivity">
+            android:parentActivityName="com.example.ploderup.userinterface.MainActivity"
+        </activity>
+        <activity android:name="com.example.ploderup.userinterface.FilterActivity">
+            android:parentActivityName="com.example.ploderup.userinterface.MainActivity"
+        </activity>
+        <activity android:name="com.example.ploderup.userinterface.SettingsActivity">
+            android:parentActivityName="com.example.ploderup.userinterface.MainActivity"
+        </activity>
+        <activity android:name="com.example.ploderup.userinterface.MapActivity">
+            android:parentActivityName="com.example.ploderup.userinterface.PersonActivity"
+        </activity>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

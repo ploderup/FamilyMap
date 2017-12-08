@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 public class SettingsActivity extends SingleFragmentActivity {
     @Override
     protected String setTitle() {
-        return "FamilyMap | Settings";
+        return "Settings";
     }
 
     @Override

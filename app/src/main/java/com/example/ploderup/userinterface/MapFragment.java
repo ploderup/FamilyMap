@@ -24,8 +24,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 // MEMBERS
     private final String TAG = "MapFragment";
-    private GoogleMap mMap;
+    private GoogleMap mGoogleMap;
     private LinearLayout mEventDetails;
+    private Settings mSettings = Settings.getInstance();
 
 // METHODS
     /**
@@ -42,13 +43,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView called");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         // Wire-up all widgets
         mEventDetails = v.findViewById(R.id.event_details);
@@ -61,6 +58,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        // TODO: Update the map
     }
 
     @Override
@@ -127,12 +136,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * Manipulates the map once available.
      */
     @Override
-    public void onMapReady(GoogleMap google_map) {
-        mMap = google_map;
+    public void onMapReady(GoogleMap mGoogleMap) {
+        this.mGoogleMap = mGoogleMap;
 
         // Set-up the map
-        mMap.setMapType(Settings.getInstance().getMapType());
-        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mGoogleMap.setMapType(mSettings.getMapType());
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
         // TODO: Lay down event pins
 
@@ -140,7 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

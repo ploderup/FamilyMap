@@ -1,5 +1,9 @@
 package com.example.ploderup.model;
 
+import android.util.Log;
+
+import com.example.ploderup.userinterface.R;
+
 import static com.google.android.gms.maps.GoogleMap.*;
 
 /**
@@ -11,9 +15,9 @@ public class Settings {
     private static Settings mSettings;
     private Settings() {
         // Constant color values
-        final int RED   = 0xFF0000;
-        final int GREEN = 0x00FF00;
-        final int BLUE  = 0x0000FF;
+        final int RED   = R.color.red;
+        final int GREEN = R.color.green;
+        final int BLUE  = R.color.blue;
 
         // Initialize settings
         mLifeStoryLinesEnabled = true;
