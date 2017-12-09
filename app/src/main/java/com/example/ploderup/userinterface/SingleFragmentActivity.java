@@ -25,8 +25,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setTitle(setTitle());
         setContentView(R.layout.activity_single_fragment);
-        if (getSupportActionBar() == null) Log.d(TAG, "The ActionBar is null");
-        else getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);

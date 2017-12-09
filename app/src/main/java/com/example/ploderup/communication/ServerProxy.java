@@ -87,6 +87,12 @@ public class ServerProxy {
     }
 
     /**
+     * LOGOUT USER
+     * [Explanation]
+     */
+    public static void logoutUser(String url_prefix, )
+
+    /**
      * GET FAMILY TREE
      * Attempts to retrieve a family tree from the FamilyMap database. Note, that this function
      * should only be called by either registerUser or loginUser after having set the username and
@@ -195,67 +201,5 @@ public class ServerProxy {
         OutputStreamWriter sw = new OutputStreamWriter(os);
         sw.write(str);
         sw.flush();
-    }
-
-// INNER CLASSES
-    public static class DataCache {
-    // MEMBERS
-        /**
-         * USERNAME
-         * The username of the user currently logged in to the app. Null until a successful login has
-         * occurred.
-         */
-        private static String mUsername;
-        public static String getUsername() { return mUsername; }
-        public static void setUsername(String username) { mUsername = username; }
-
-        /**
-         * FULL NAME
-         * The first and last name of the user currently logged in.
-         */
-        private static String mFullName;
-        public static String getFullName() { return mFullName; }
-
-        /**
-         * UPDATE FULL NAME
-         * Searches for the ID of the root person in the family tree, and sets full name data member
-         * to the name of the person corresponding to that ID.
-         */
-        public static void updateFullName() {
-            if(mRootPersonID == null || mFamilyTree == null) return;
-
-            for(Person person : mFamilyTree)
-                if(person.getPersonID().equals(mRootPersonID)) {
-                    mFullName = person.getFirstName() + " " + person.getLastName();
-                    Log.d(TAG, "Set full name member to " + mFullName);
-                }
-        }
-
-        /**
-         * ROOT PERSON ID
-         * The ID of the person object corresponding to the user currently logged in. Null until a
-         * successful login has occurred.
-         */
-        private static String mRootPersonID;
-        public static String getRootPersonID() { return mRootPersonID; }
-        public static void setRootPersonID(String root_person_id) { mRootPersonID = root_person_id; }
-
-        /**
-         * AUTHENTICATION TOKEN
-         * The most recent authentication token returned by the server. Null until a successful login
-         * has occurred.
-         */
-        private static String mAuthToken;
-        public static String getAuthToken() { return mAuthToken; }
-        public static void setAuthToken(String auth_token) { mAuthToken = auth_token; }
-
-        /**
-         * FAMILY TREE
-         * The family tree of the currently logged in user. Null until a successful login has
-         * occurred.
-         */
-        private static ArrayList<Person> mFamilyTree;
-        public static ArrayList<Person> getFamilyTree() { return mFamilyTree; }
-        public static void setFamilyTree(ArrayList<Person> family_tree) { mFamilyTree = family_tree; }
     }
 }
