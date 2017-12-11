@@ -13,6 +13,8 @@ public class Filter {
         mFilterBirthEvents = false;
         mFilterCensusEvents = false;
         mFilterChristeningEvents = false;
+        mFilterDeathEvents = false;
+        mFilterMarriageEvents = false;
         mFilterFathersSide = false;
         mFilterMothersSide = false;
         mFilterMaleEvents = false;
@@ -63,6 +65,14 @@ public class Filter {
     }
     public void setFilterDeathEvents(boolean mFilterDeathEvents) {
         this.mFilterDeathEvents = mFilterDeathEvents;
+    }
+
+    private boolean mFilterMarriageEvents;
+    public boolean getFilterMarriageEvents() {
+        return mFilterMarriageEvents;
+    }
+    public void setFilterMarriageEvents(boolean mFilterMarriageEvents) {
+        this.mFilterMarriageEvents = mFilterMarriageEvents;
     }
 
     private boolean mFilterFathersSide;

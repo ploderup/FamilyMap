@@ -9,10 +9,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+
+import com.example.ploderup.model.Filter;
 
 public class FilterFragment extends Fragment {
 // MEMBERS
     private final String TAG = "FilterFragment";
+
+    private Filter mFilter = Filter.getInstance();
+
+    private Switch mFilterBaptismEventsSwitch;
+    private Switch mFilterBirthEventsSwitch;
+    private Switch mFilterCensusEventsSwitch;
+    private Switch mFilterChristeningEventsSwitch;
+    private Switch mFilterDeathEventsSwitch;
+    private Switch mFilterMarriageEventsSwitch;
+    private Switch mFilterFathersSideSwitch;
+    private Switch mFilterMothersSideSwitch;
+    private Switch mFilterMaleEventsSwitch;
+    private Switch mFilterFemaleEventsSwitch;
 
 // METHODS
     @Override
@@ -27,8 +44,77 @@ public class FilterFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_filter, container, false);
 
-        // Wire-up all widgets
-        // TODO
+        // Wire-up all switches
+        mFilterBaptismEventsSwitch = v.findViewById(R.id.filter_baptism_events_switch);
+        mFilterBaptismEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterBaptismEvents(b);
+            }
+        });
+        mFilterBirthEventsSwitch = v.findViewById(R.id.filter_birth_events_switch);
+        mFilterBirthEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterBirthEvents(b);
+            }
+        });
+        mFilterCensusEventsSwitch = v.findViewById(R.id.filter_census_events_switch);
+        mFilterCensusEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterCensusEvents(b);
+            }
+        });
+        mFilterChristeningEventsSwitch = v.findViewById(R.id.filter_christening_events_switch);
+        mFilterChristeningEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterChristeningEvents(b);
+            }
+        });
+        mFilterDeathEventsSwitch = v.findViewById(R.id.filter_death_events_switch);
+        mFilterDeathEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterDeathEvents(b);
+            }
+        });
+        mFilterMarriageEventsSwitch = v.findViewById(R.id.filter_marriage_events_switch);
+        mFilterMarriageEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterMarriageEvents(b);
+            }
+        });
+        mFilterFathersSideSwitch = v.findViewById(R.id.filter_fathers_side_switch);
+        mFilterFathersSideSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterFathersSide(b);
+            }
+        });
+        mFilterMothersSideSwitch = v.findViewById(R.id.filter_mothers_side_switch);
+        mFilterMothersSideSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterMothersSide(b);
+            }
+        });
+        mFilterMaleEventsSwitch = v.findViewById(R.id.filter_male_events_switch);
+        mFilterMaleEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterMaleEvents(b);
+            }
+        });
+        mFilterFemaleEventsSwitch = v.findViewById(R.id.filter_female_events_switch);
+        mFilterFemaleEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mFilter.setFilterFemaleEvents(b);
+            }
+        });
 
         return v;
     }

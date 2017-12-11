@@ -66,6 +66,31 @@
     </string-array>
 
 
+    <!--===================-->
+    <!-- Filter Fragment -->
+    <!--===================-->
+    <string name="filter_baptism_events_option">Baptism events</string>
+    <string name="filter_baptism_events_detail">Filter out all baptism events</string>
+    <string name="filter_birth_events_option">Birth events</string>
+    <string name="filter_birth_events_detail">Filter out all birth events</string>
+    <string name="filter_census_events_option">Census events</string>
+    <string name="filter_census_events_detail">Filter out all census</string>
+    <string name="filter_christening_events_option">Christening events</string>
+    <string name="filter_christening_events_detail">Filter out all christening events</string>
+    <string name="filter_death_events_option">Death events</string>
+    <string name="filter_death_events_detail">Filter out all death events</string>
+    <string name="filter_marriage_events_option">Marriage events</string>
+    <string name="filter_marriage_events_detail">Filter out all marriage events</string>
+    <string name="filter_fathers_side_option">Father\'s side</string>
+    <string name="filter_fathers_side_detail">Filter out all events on father\'s side</string>
+    <string name="filter_mothers_side_option">Mother\'s side</string>
+    <string name="filter_mothers_side_detail">Filter out all events on mother\'s side</string>
+    <string name="filter_male_events_option">Male events</string>
+    <string name="filter_male_events_detail">Filter out all male events</string>
+    <string name="filter_female_events_option">Female events</string>
+    <string name="filter_female_events_detail">Filter out all female events</string>
+
+
     <!--==============-->
     <!-- Menu Options -->
     <!--==============-->
