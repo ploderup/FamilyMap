@@ -20,20 +20,21 @@ import Facade.Result.RegisterResult;
 import Model.Person;
 
 public class ServerProxy {
-// MEMBERS
+    // MEMBERS
     private static final String TAG = "ServerProxy";
     private static final String HTTP_GET = "GET";
     private static final String HTTP_POST = "POST";
 
 // METHODS
+
     /**
      * LOGIN USER
      * Attempts to log the user in at a given server's database, using given credentials.
      *
      * @param url_prefix a non-empty string specifying the hostname and port number of a valid
      *                   FamilyMap server
-     * @param username a non-empty string
-     * @param password a non-empty string
+     * @param username   a non-empty string
+     * @param password   a non-empty string
      * @return whether or not the login was successful
      */
     public static LoginResult loginUser(String url_prefix, String username, String password) {
@@ -58,12 +59,12 @@ public class ServerProxy {
      *
      * @param url_prefix a non-empty string specifying the hostname and port number of a valid
      *                   FamilyMap server
-     * @param username a non-empty string
-     * @param password a non-empty string
+     * @param username   a non-empty string
+     * @param password   a non-empty string
      * @param first_name a non-empty string
-     * @param last_name a non-empty string
-     * @param email a valid email address
-     * @param gender "m" or "f"
+     * @param last_name  a non-empty string
+     * @param email      a valid email address
+     * @param gender     "m" or "f"
      * @return whether the registration was successful or not
      */
     public static RegisterResult registerUser(String url_prefix, String username, String password,
@@ -90,7 +91,7 @@ public class ServerProxy {
      * LOGOUT USER
      * [Explanation]
      */
-    public static void logoutUser(String url_prefix, )
+//    public static void logoutUser(String url_prefix,)
 
     /**
      * GET FAMILY TREE
@@ -114,11 +115,11 @@ public class ServerProxy {
      * POST TO SERVER
      * Makes a connection to a FamilyMap Server and returns its result.
      *
-     * @param url_prefix the part of the URL containing the FamilyMap Server's host name and port
-     *                   number (e.g. "192.168.0.12:8080")
-     * @param api_url the FamilyMap Server API part of the URL (e.g. "/user/login")
-     * @param auth_token a valid authentication token string (set to null if not required for post
-     *                   operation)
+     * @param url_prefix   the part of the URL containing the FamilyMap Server's host name and port
+     *                     number (e.g. "192.168.0.12:8080")
+     * @param api_url      the FamilyMap Server API part of the URL (e.g. "/user/login")
+     * @param auth_token   a valid authentication token string (set to null if not required for post
+     *                     operation)
      * @param request_body the request to be sent to the server (in JSON format); can be null
      * @return A [Service]Result object corresponding to the post performed to the server
      */
@@ -139,7 +140,7 @@ public class ServerProxy {
             // Setup the connection
             Log.d(TAG, "Setting up the connection");
             url_connection.setRequestMethod(request_method);
-            if(request_method.equals(HTTP_GET)) {
+            if (request_method.equals(HTTP_GET)) {
                 url_connection.setDoInput(true);
                 url_connection.setDoOutput(false);
             } else {
@@ -153,7 +154,8 @@ public class ServerProxy {
 
             // Is there any body data to add?
             Log.d(TAG, "Checking for body data to add");
-            if(request_body != null) stringToStream(request_body, url_connection.getOutputStream());
+            if (request_body != null)
+                stringToStream(request_body, url_connection.getOutputStream());
             Log.d(TAG, "Done w/ body data");
 
             // Make the connection
@@ -163,7 +165,7 @@ public class ServerProxy {
 
             // Was the connection successful?
             Log.d(TAG, "What was the connection code?");
-            if(url_connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            if (url_connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 // Convert the response from JSON into a result object
                 InputStreamReader input_stream_reader =
                         new InputStreamReader(url_connection.getInputStream());
@@ -177,12 +179,12 @@ public class ServerProxy {
                 Log.e(TAG, "Code other than HTTP_OK returned to connectToServer(): " +
                         url_connection.getResponseCode());
             }
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException encountered. See connectToServer().");
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "IOException encountered. See connectToServer().");
             Log.e(TAG, e.getMessage());
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Exception encountered. See connectToServer().");
             Log.e(TAG, e.getMessage());
         }
@@ -195,11 +197,119 @@ public class ServerProxy {
      * Writes a string into an output stream.
      *
      * @param str, a non-empty string
-     * @param os, an instantiated output stream object
+     * @param os,  an instantiated output stream object
      */
     private static void stringToStream(String str, OutputStream os) throws IOException {
         OutputStreamWriter sw = new OutputStreamWriter(os);
         sw.write(str);
         sw.flush();
+    }
+
+    public static class DataCache {
+    // MEMBERS
+        /**
+         * URL PREFIX
+         * The host name and port number of the FamilyMap server (e.g., 192.168.0.0:8080).
+         */
+        private static String mURLPrefix;
+
+        public static String getURLPrefix() {
+            return mURLPrefix;
+        }
+
+        public static void setURLPrefix(String url_prefix) {
+            mURLPrefix = url_prefix;
+        }
+
+        /**
+         * USERNAME
+         * The username of the user currently logged in to the app. Null when no user is logged in
+         * to the server.
+         */
+        private static String mUsername;
+
+        public static String getUsername() {
+            return mUsername;
+        }
+
+        public static void setUsername(String username) {
+            mUsername = username;
+        }
+
+        /**
+         * FULL NAME
+         * The first and last name of the user currently logged in. Null when no user is logged in
+         * to the server.
+         */
+        private static String mFullName;
+
+        public static String getFullName() {
+            return mFullName;
+        }
+
+        /**
+         * UPDATE FULL NAME
+         * Searches for the ID of the root person in the family tree, and sets full name data member
+         * to the name of the person corresponding to that ID.
+         */
+        public static void updateFullName() {
+            if (mRootPersonID == null || mFamilyTree == null) return;
+
+            for (Person person : mFamilyTree)
+                if (person.getPersonID().equals(mRootPersonID)) {
+                    mFullName = person.getFirstName() + " " + person.getLastName();
+                }
+        }
+
+        /**
+         * ROOT PERSON ID
+         * The ID of the person object corresponding to the user currently logged in. Null when no
+         * user is logged in to the server.
+         */
+        private static String mRootPersonID;
+
+        public static String getRootPersonID() {
+            return mRootPersonID;
+        }
+
+        public static void setRootPersonID(String root_person_id) {
+            mRootPersonID = root_person_id;
+        }
+
+        /**
+         * AUTHENTICATION TOKEN
+         * The most recent authentication token returned by the server. Null when no user is logged
+         * in to the server.
+         */
+        private static String mAuthToken;
+
+        public static String getAuthToken() {
+            return mAuthToken;
+        }
+
+        public static void setAuthToken(String auth_token) {
+            mAuthToken = auth_token;
+        }
+
+        /**
+         * FAMILY TREE
+         * The family tree of the currently logged in user. Null when no user is logged in to the
+         * server.
+         */
+        private static ArrayList<Person> mFamilyTree;
+
+        public static ArrayList<Person> getFamilyTree() {
+            return mFamilyTree;
+        }
+
+        public static void setFamilyTree(ArrayList<Person> family_tree) {
+            mFamilyTree = family_tree;
+        }
+
+        /**
+         * FAMILY EVENTS
+         * All of the events associated with members of the current user's family tree. Null when no
+         * user is logged in to the server.
+         */
     }
 }

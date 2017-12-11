@@ -3,6 +3,7 @@ package com.example.ploderup.userinterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.ploderup.model.Settings;
@@ -26,6 +28,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final String TAG = "MapFragment";
     private GoogleMap mGoogleMap;
     private LinearLayout mEventDetails;
+    private ImageView mEventIcon;
     private Settings mSettings = Settings.getInstance();
 
 // METHODS
@@ -47,8 +50,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        // Wire-up all widgets
-        mEventDetails = v.findViewById(R.id.event_details);
+        // Set on-click listener for event display box
+        mEventDetails = v.findViewById(R.id.event_display);
         mEventDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +59,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 getActivity().startActivity(new Intent(getActivity(), PersonActivity.class));
             }
         });
+
+        // Initialize event display box
+        mEventIcon = v.findViewById(R.id.event_icon);
+        mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_location));
 
         return v;
     }

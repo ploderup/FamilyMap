@@ -182,7 +182,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Log the user out of FamilyMap
-                ServerProxy.logoutUser();
+                //TODO: ServerProxy.logoutUser();
             }
         });
 

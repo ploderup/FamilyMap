@@ -29,6 +29,13 @@
     <string name="title_activity_settings">Settings</string>
 
 
+    <!--==============-->
+    <!-- Map Fragment -->
+    <!--==============-->
+    <string name="click_a_marker_top">Click on a marker</string>
+    <string name="click_a_marker_bottom">to see event details</string>
+
+
     <!--===================-->
     <!-- Settings Fragment -->
     <!--===================-->

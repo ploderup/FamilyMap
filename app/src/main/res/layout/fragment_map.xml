@@ -11,23 +11,45 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
-        android:layout_margin="10dp" />
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        tools:layout="@layout/fragment_filter" />
 
-    <LinearLayout android:id="@+id/event_details"
+    <LinearLayout android:id="@+id/event_display"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/lightGray"
+        android:padding="10dp">
 
-        <ImageView
+        <ImageView android:id="@+id/event_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"/>
 
-        <TextView
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You made it to the map fragment!">
-        </TextView>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView android:id="@+id/event_person_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/click_a_marker_top"/>
+
+            <TextView android:id="@+id/event_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/click_a_marker_bottom"/>
+
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
