@@ -9,12 +9,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class PersonFragment extends Fragment {
-    // MEMBERS
+// MEMBERS
     private final String TAG = "PersonFragment";
 
-    // METHODS
+    private TextView mFirstNameTextView;
+    private TextView mLastNameTextView;
+    private TextView mGenderTextView;
+
+
+// METHODS
     @Override
     public void onCreate(Bundle saved_instance_state) {
         super.onCreate(saved_instance_state);
@@ -28,29 +34,28 @@ public class PersonFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_person, container, false);
 
         // Wire-up all widgets
-        // TODO
+        mFirstNameTextView = v.findViewById(R.id.person_fragment_fname_view);
+        mFirstNameTextView.setText("Peter");
+        mLastNameTextView = v.findViewById(R.id.person_fragment_lname_view);
+        mLastNameTextView.setText("Loderup");
+        mGenderTextView = v.findViewById(R.id.person_fragment_gender_view);
+        mGenderTextView.setText("Male");
 
         return v;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_mp, menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.back_menu_item:
-                // TODO: Go back
-                break;
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
 
             default:
                 Log.e(TAG, "Default (error) case reached at onOptionsItemSelected");
                 Log.e(TAG, "Item ID was " + Integer.toHexString(item.getItemId()));
         }
 
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 }

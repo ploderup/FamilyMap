@@ -56,7 +56,6 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        /** Wire Up All Widgets **/
         // Life-story line color spinner
         mLifeStoryLineColorSpinner = v.findViewById(R.id.life_story_line_color_spinner);
         adapter = ArrayAdapter.createFromResource(getContext(),
@@ -80,6 +79,7 @@ public class SettingsFragment extends Fragment {
 
         // Life-story line switch
         mLifeStoryLineSwitch = v.findViewById(R.id.life_story_line_color_switch);
+        mLifeStoryLineSwitch.setChecked(mSettings.getLifeStoryLinesEnabled());
         mLifeStoryLineSwitch
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -111,6 +111,7 @@ public class SettingsFragment extends Fragment {
 
         // Family tree line switch
         mFamilyTreeLineSwitch = v.findViewById(R.id.family_tree_line_color_switch);
+        mFamilyTreeLineSwitch.setChecked(mSettings.getFamilyTreeLinesEnabled());
         mFamilyTreeLineSwitch
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -140,6 +141,7 @@ public class SettingsFragment extends Fragment {
 
         // Spouse line switch
         mSpouseLineSwitch = v.findViewById(R.id.spouse_line_color_switch);
+        mSpouseLineSwitch.setChecked(mSettings.getSpouseLinesEnabled());
         mSpouseLineSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

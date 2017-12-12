@@ -91,6 +91,14 @@
     <string name="filter_female_events_detail">Filter out all female events</string>
 
 
+    <!--===================-->
+    <!-- Filter Fragment -->
+    <!--===================-->
+    <string name="person_fname_detail">First name</string>
+    <string name="person_lname_detail">Last name</string>
+    <string name="person_gender_detail">Gender</string>
+
+
     <!--==============-->
     <!-- Menu Options -->
     <!--==============-->
