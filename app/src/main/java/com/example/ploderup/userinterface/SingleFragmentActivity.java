@@ -32,6 +32,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
         if (fragment == null) {
             fragment = createFragment();
+
+            // Were there any extras passed in with the Intent?
+            if (getIntent().getExtras() != null) fragment.setArguments(getIntent().getExtras());
+
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();

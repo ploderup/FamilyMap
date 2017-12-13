@@ -41,6 +41,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ImageView mEventIcon;
     private TextView mEventPerson;
     private TextView mEventDetails;
+    private Person mCurrentPerson;
+
+    private ArrayList<Marker> mEventMarkers;
 
     private Settings mSettings = Settings.getInstance();
     private Filter mFilter = Filter.getInstance();
@@ -122,7 +125,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 case R.id.search_menu_item:
                     // Start a SearchActivity
-                    getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
+                    getActivity().startActivity(new Intent(getActivity(), SearchActivity.class)
+                            .putExtra("first_name", mCurrentPerson.getFirstName())
+                            .putExtra("last_name", mCurrentPerson.getLastName())
+                            .putExtra("gender", mCurrentPerson.getGender()));
                     break;
 
                 case R.id.settings_menu_item:
@@ -170,10 +176,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Wait for DataSyncTask to finish (TODO: Find a cleaner way to do this)
         while(!mFamilyMap.getDataSyncDone());
 
-        // Do the event markers need to be initialized?
-        Log.d(TAG, "Initializing event markers");
-        ArrayList<Event> events = mFamilyMap.getAllEvents();
-        placeEventMarkers(events);
+        // Do the markers need to be placed?
+        if (mEventMarkers == null)
+            placeEventMarkers(mFamilyMap.getAllEvents()); else updateEventMarkers();
 
         // Set a listener for clicks on the event markers
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -197,11 +202,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         event.getEventType().substring(1) + ": " + event.getCity() + ", " +
                         event.getCountry() + " (" + event.getYear() + ")");
 
+                // Update mCurrentPerson
+                mCurrentPerson = person;
+
                 return false;
             }
         });
-
-        // TODO: Do any of the event markers need to be hidden?
 
         // TODO: Draw map lines
 
@@ -213,6 +219,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      */
     private void placeEventMarkers(ArrayList<Event> events) {
         if(events == null) return;
+
+        // Initialize the marker array-list
+        mEventMarkers = new ArrayList<>();
 
         Log.d(TAG, "Drawing an event pin on the map");
         for(Event event : events) {
@@ -231,13 +240,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // Where did the event take place?
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
 
-            // Drop a pin for the event
+            // Drop a marker for the event
             Marker marker = mGoogleMap
                     .addMarker(new MarkerOptions()
                             .position(location)
                             .icon(BitmapDescriptorFactory.defaultMarker(event_color)));
             marker.setTag(event);
-            if(event.getEventType().equals("baptism")) marker.setVisible(false);
+
+            // Add the marker to an array-list
+            mEventMarkers.add(marker);
+        }
+    }
+
+    /**
+     * Sets marker visibility based upon whether it should be filtered or not.
+     */
+    private void updateEventMarkers() {
+        Log.i(TAG, "Updating event markers");
+        for (Marker marker : mEventMarkers) {
+            // Should this marker be visible on the map (i.e., is it filtered?)
+            marker.setVisible(!mFamilyMap.isFiltered((Event) marker.getTag()));
         }
     }
 }

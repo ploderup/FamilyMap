@@ -2,6 +2,7 @@ package com.example.ploderup.userinterface;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,10 +10,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class SearchFragment extends Fragment {
     // MEMBERS
     private final String TAG = "SearchFragment";
+    private SearchView mSearchBar;
+    private TextView b1;
+    private TextView b2;
 
     // METHODS
     @Override
@@ -28,7 +33,22 @@ public class SearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
         // Wire-up all widgets
-        // TODO
+        mSearchBar = v.findViewById(R.id.search_bar);
+        b1 = v.findViewById(R.id.box_one);
+        b2 = v.findViewById(R.id.box_two);
+        mSearchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO:
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Do nothing
+                return false;
+            }
+        });
 
         return v;
     }

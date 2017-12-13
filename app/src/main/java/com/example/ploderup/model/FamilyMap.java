@@ -63,7 +63,7 @@ public class FamilyMap {
      * Checks whether or not a given event should be filtered from the MapFragment, based on filters
      * applied by the user.
      * @param event a not-null event
-     * @return whether the event should be filtered or not
+     * @return whether the event should be filtered
      * @see Filter
      */
     public boolean isFiltered(Event event) {
@@ -73,171 +73,99 @@ public class FamilyMap {
         }
 
         // Is the event's type filtered?
-        if (mFilter.getFilterBaptismEvents() && event.getEventType().equals("baptism"))
-            return true;
-        if (mFilter.getFilterBirthEvents() && event.getEventType().equals("birth"))
-            return true;
-        if (mFilter.getFilterCensusEvents() && event.getEventType().equals("census"))
-            return true;
-        if (mFilter.getFilterChristeningEvents() && event.getEventType().equals("christening"))
-            return true;
-        if (mFilter.getFilterDeathEvents() && event.getEventType().equals("death"))
-            return true;
-        if (mFilter.getFilterMarriageEvents() && event.getEventType().equals("marriage"))
-            return true;
+        if (isFilteredByType(event.getEventType())) return true;
 
         // Is the gender of the person associated with the event filtered?
-        if (mFilter.getFilterMaleEvents() &&
-                findPersonByID(event.getPersonID()).getGender().equals("m"))
-            return true;
-        if (mFilter.getFilterFemaleEvents() &&
-                findPersonByID(event.getPersonID()).getGender().equals("f"))
-            return true;
+        if (isFilteredByGender(findPersonByID(event.getPersonID()).getGender())) return true;
 
-        // TODO: Is the event associated with a side of the tree currently filtered?
+        // Is the event associated with a side of the tree currently filtered?
+        if (mFilter.getFilterFathersSide())
+            if (isFilteredBySide(event.getPersonID(),
+                    findPersonByID(mRootPersonID).getFatherID()))
+                return true;
+        if (mFilter.getFilterMothersSide())
+            if (isFilteredBySide(event.getPersonID(),
+                    findPersonByID(mRootPersonID).getMotherID()))
+                return true;
 
+        // No filters apply to the event given
         return false;
     }
 
     /**
-     * Retrieves all events not currently filtered out by the user.
-     * @return a not-null, but potentially empty array list of event objects
-     * @see Filter
+     * Checks whether or not a given event should be filtered from the MapFragment, based on event-
+     * type filters applied by the user.
+     * @param event_type a not-null string
+     * @return whether the event should be filtered
      */
-    public ArrayList<Event> getNotFilteredEvents() {
-        if(mAllEvents == null || mAllPeople == null || mRootPersonID == null) {
-            Log.e(TAG, "Unable to run getNotFilteredEvents due to null class members");
-            return null;
+    private boolean isFilteredByType(String event_type) {
+        if(event_type == null) {
+            Log.e(TAG, "Null pointer passed to isFilteredByType");
         }
 
-        // Start with all events
-        ArrayList<Event> events = new ArrayList<>(mAllEvents);
-
-        // Are there any family-side filters applied?
-        try {
-            if (mFilter.getFilterFathersSide())
-                events = filterEventsByFamilySide(events,
-                        findPersonByID(mRootPersonID).getFatherID());
-            if (mFilter.getFilterMothersSide())
-                events = filterEventsByFamilySide(events,
-                        findPersonByID(mRootPersonID).getMotherID());
-
-            // Are there any gender-filters applied?
-            if (mFilter.getFilterMaleEvents())
-                events = filterEventsByGender(events, "m");
-            if (mFilter.getFilterFemaleEvents())
-                events = filterEventsByGender(events, "f");
-
-            // Are there any event-type filters applied?
-            if (mFilter.getFilterBaptismEvents())
-                events = filterEventsByEventType(events, "baptism");
-            if (mFilter.getFilterBirthEvents())
-                events = filterEventsByEventType(events, "birth");
-            if (mFilter.getFilterCensusEvents())
-                events = filterEventsByEventType(events, "census");
-            if (mFilter.getFilterChristeningEvents())
-                events = filterEventsByEventType(events, "christening");
-            if (mFilter.getFilterDeathEvents())
-                events = filterEventsByEventType(events, "death");
-            if (mFilter.getFilterMarriageEvents())
-                events = filterEventsByEventType(events, "marriage");
+        // What is the type of the event?
+        switch(event_type) {
+            case "baptism": return mFilter.getFilterBaptismEvents();
+            case "birth": return mFilter.getFilterBirthEvents();
+            case "census": return mFilter.getFilterCensusEvents();
+            case "christening": return mFilter.getFilterChristeningEvents();
+            case "death": return mFilter.getFilterDeathEvents();
+            case "marriage": return mFilter.getFilterMarriageEvents();
+            default: return false;
+        }
+    }
 
 
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
+    /**
+     * Checks whether or not a given event should be filtered from the MapFragment, based on gender
+     * filters applied by the user.
+     * @param gender a not-null string
+     * @return whether the event should be filtered
+     */
+    private boolean isFilteredByGender(String gender) {
+        if (gender == null) {
+            Log.i(TAG, "Null pointer passed to isFilteredByGender");
         }
 
-        return events;
+        // What is the gender of the person associated with the event?
+        switch(gender) {
+            case "m": return mFilter.getFilterMaleEvents();
+            case "f": return mFilter.getFilterFemaleEvents();
+            default: return false;
+        }
     }
 
     /**
-     * Filters all events associated with a given person ID and, if the person connected to that ID
-     * has parents, the method recurses on the IDs of that person's parents.
-     * @param events an non-empty array-list of event objects
+     * Checks whether or not a given event should be filtered from the MapFragment, based on gender
+     * filters applied by the user.
      * @param person_id a non-empty string
-     * @return a filtered array-list of event objects
-     * @throws Exception when given invalid input
+     * @param parent_id a non-empty string
+     * @return whether the event should be filtered
      */
-    private ArrayList<Event> filterEventsByFamilySide(ArrayList<Event> events, String person_id)
-            throws Exception {
-        if (events == null || person_id == null)
-            throw new Exception("Null pointer passed to filterEventsByFamilySide");
-        if (events.size() == 0)
-            throw new Exception("Empty array-list passed to filterEventsByFamilySide");
-        if (person_id.equals(""))
-            throw new Exception("Empty string passed to filterEventsByFamilySide");
-        if (findPersonByID(person_id) == null)
-            throw new Exception("Identifier passed to filterEventsByFamilySide not found in tree");
-
-        // Remove all events associated with this person
-        for(Iterator<Event> iterator = events.iterator(); iterator.hasNext();)
-            // Is this event associated with the given person ID?
-            if (iterator.next().getPersonID().equals(person_id))
-                // Then remove it
-                iterator.remove();
-
-        // Does the person have a father in the family tree?
-        if (findPersonByID(person_id).getFatherID() != null)
-            events = filterEventsByFamilySide(events, findPersonByID(person_id).getFatherID());
-
-        // Does the person have a mother in the family tree?
-        if (findPersonByID(person_id).getMotherID() != null)
-            events = filterEventsByFamilySide(events, findPersonByID(person_id).getMotherID());
-
-        return events;
-    }
-
-    /**
-     * Filters all events associated with a person of a given gender out of an array-list of events.
-     * Note, this method assumes all events in mAllEvents correspond with a unique person in
-     * mAllPeople.
-     * @param events a non-empty array-list of event objects
-     * @return a filtered array-list of event objects
-     * @throws Exception when given invalid input
-     */
-    private ArrayList<Event> filterEventsByGender(ArrayList<Event> events, String gender)
-            throws Exception {
-        if (events == null || gender == null)
-            throw new Exception("Null pointer passed to filterEventsByGender");
-        if (events.size() == 0)
-            throw new Exception("Empty array-list passed to filterEventsByGender");
-        if (!gender.equals("m") && !gender.equals("f"))
-            throw new Exception("Invalid gender passed to filterEventsByGender");
-
-        for(Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
-            Event event = iterator.next();
-
-            // Does the gender of the person associated with this event match the given gender?
-            if(findPersonByID(event.getPersonID()).getGender().equals(gender))
-                // Then remove the event from the array-list
-                iterator.remove();
+    private boolean isFilteredBySide(String person_id, String parent_id) {
+        if (person_id == null) {
+            Log.e(TAG, "Null pointer passed to filterEventsByFamilySide");
+            return false;
+        }
+        if (person_id.equals("")) {
+            Log.e(TAG, "Empty string passed to filterEventsByFamilySide");
+            return false;
         }
 
-        return events;
-    }
+        // Does this person's ID match the ID provided?
+        if (person_id.equals(parent_id)) return true;
 
-    /**
-     * Filters all events of a given type (e.g., "birth", "baptism", "death").
-     * @param events a non-empty array-list of event objects
-     * @param event_type a non-empty string
-     * @return a filtered array-list of event objects
-     * @throws Exception when given invalid input
-     */
-    private ArrayList<Event> filterEventsByEventType(ArrayList<Event> events, String event_type)
-            throws Exception {
-        if(events == null || events.size() == 0)
-            throw new Exception("Invalid events passed to filterEventsByEventType");
-        if(event_type == null || event_type.equals(""))
-            throw new Exception("Invalid event_type passed to filterEventsByEventType");
+        // Does this person has a father in the family tree?
+        if (findPersonByID(parent_id).getFatherID() != null)
+            // Does the given ID exist on the father's side of the tree?
+            if (isFilteredBySide(person_id, findPersonByID(parent_id).getFatherID())) return true;
 
-        for(Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
-            // Does the type of the event match the given type?
-            if(iterator.next().getEventType().equals(event_type))
-                // Then remove the event from the array-list
-                iterator.remove();
-        }
+        // Does this person has a mother in the family tree?
+        if (findPersonByID(parent_id).getMotherID() != null)
+            // Does the given ID exist on the mother's side of the tree?
+            if (isFilteredBySide(person_id, findPersonByID(parent_id).getMotherID())) return true;
 
-        return events;
+        return false;
     }
 
     /**

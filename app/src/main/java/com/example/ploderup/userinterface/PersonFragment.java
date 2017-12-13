@@ -35,11 +35,17 @@ public class PersonFragment extends Fragment {
 
         // Wire-up all widgets
         mFirstNameTextView = v.findViewById(R.id.person_fragment_fname_view);
-        mFirstNameTextView.setText("Peter");
         mLastNameTextView = v.findViewById(R.id.person_fragment_lname_view);
-        mLastNameTextView.setText("Loderup");
         mGenderTextView = v.findViewById(R.id.person_fragment_gender_view);
-        mGenderTextView.setText("Male");
+
+        // Retrieve data passed by Intent
+        if (getArguments() != null) {
+            Log.d(TAG, "Arguments passed by intent were not null");
+            Bundle bundle = getArguments();
+            mFirstNameTextView.setText(bundle.getString("first_name"));
+            mLastNameTextView.setText(bundle.getString("last_name"));
+            mGenderTextView.setText(bundle.getString("gender"));
+        }
 
         return v;
     }
