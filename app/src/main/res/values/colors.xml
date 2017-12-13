@@ -10,4 +10,13 @@
     <color name="black">#000000</color>
     <color name="lightGray">#E0E0E0</color>
     <color name="darkGray">#808080</color>
+
+    <!-- Pin Colors -->
+    <color name="pinGreen">#5dcc87</color>
+    <color name="pinBlue">#5dc6cc</color>
+    <color name="pinPurple">#895dcc</color>
+    <color name="pinPink">#ca5dcc</color>
+    <color name="pinRed">#cc5d5d</color>
+    <color name="pinOrange">#cc8d5d</color>
+    <color name="pinGray">#b7b7b7</color>
 </resources>

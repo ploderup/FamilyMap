@@ -47,7 +47,7 @@ public class Settings {
     }
     public void setLifeStoryLinesEnabled(boolean mLifeStoryLinesEnabled) {
         this.mLifeStoryLinesEnabled = mLifeStoryLinesEnabled;
-        Log.d(TAG, "mLifeStoryLinesEnabled set to " + mLifeStoryLinesEnabled);
+        Log.i(TAG, "mLifeStoryLinesEnabled set to " + mLifeStoryLinesEnabled);
     }
 
     /**
@@ -59,7 +59,7 @@ public class Settings {
     }
     public void setLifeStoryLinesColor(int mLifeStoryLinesColor) {
         this.mLifeStoryLinesColor = mLifeStoryLinesColor;
-        Log.d(TAG, "mLifeStoryLinesColor set to " + mLifeStoryLinesColor);
+        Log.i(TAG, "mLifeStoryLinesColor set to " + mLifeStoryLinesColor);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Settings {
     }
     public void setFamilyTreeLinesEnabled(boolean mFamilyTreeLinesEnabled) {
         this.mFamilyTreeLinesEnabled = mFamilyTreeLinesEnabled;
-        Log.d(TAG, "mFamilyTreeLinesEnabled set to " + mFamilyTreeLinesEnabled);
+        Log.i(TAG, "mFamilyTreeLinesEnabled set to " + mFamilyTreeLinesEnabled);
     }
 
     /**
@@ -83,7 +83,7 @@ public class Settings {
     }
     public void setFamilyTreeLinesColor(int mFamilyTreeLinesColor) {
         this.mFamilyTreeLinesColor = mFamilyTreeLinesColor;
-        Log.d(TAG, "mFamilyTreeLinesColor set to " + mFamilyTreeLinesColor);
+        Log.i(TAG, "mFamilyTreeLinesColor set to " + mFamilyTreeLinesColor);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Settings {
     }
     public void setSpouseLinesEnabled(boolean mSpouseLinesEnabled) {
         this.mSpouseLinesEnabled = mSpouseLinesEnabled;
-        Log.d(TAG, "mSpouseLinesEnabled set to " + mSpouseLinesEnabled);
+        Log.i(TAG, "mSpouseLinesEnabled set to " + mSpouseLinesEnabled);
     }
 
     /**
@@ -107,7 +107,7 @@ public class Settings {
     }
     public void setSpouseLinesColor(int mSpouseLinesColor) {
         this.mSpouseLinesColor = mSpouseLinesColor;
-        Log.d(TAG, "mSpouseLinesColor set to " + mSpouseLinesColor);
+        Log.i(TAG, "mSpouseLinesColor set to " + mSpouseLinesColor);
     }
 
     /**
@@ -119,7 +119,7 @@ public class Settings {
     }
     public void setMapType(int mMapType) {
         this.mMapType = mMapType;
-        Log.d(TAG, "mMapType set to " + mMapType);
+        Log.i(TAG, "mMapType set to " + mMapType);
     }
 
     /**
@@ -131,6 +131,6 @@ public class Settings {
     }
     public void setLoggedIn(boolean mLoggedIn) {
         this.mLoggedIn = mLoggedIn;
-        Log.d(TAG, "mLoggedIn set to " + mLoggedIn);
+        Log.i(TAG, "mLoggedIn set to " + mLoggedIn);
     }
 }

@@ -11,6 +11,7 @@ import com.example.ploderup.model.Settings;
 public class MainActivity extends AppCompatActivity {
 // MEMBERS
     private Settings mSettings = Settings.getInstance();
+    private final String TAG = "MainActivity";
 
 // METHODS
     @Override
@@ -44,8 +45,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TAG:
-     * The name of the activity, for logging.
+     * Alters the behavior of the native back button. By default, a back press when the MapFragment
+     * is open will return the user to the LoginFragment. This override instead closes the app.
      */
-    private final String TAG = "MainActivity";
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "Back button pressed in MainActivity");
+        finish();
+    }
 }

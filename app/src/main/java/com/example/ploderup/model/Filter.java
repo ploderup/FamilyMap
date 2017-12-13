@@ -2,8 +2,6 @@ package com.example.ploderup.model;
 
 import android.util.Log;
 
-import Model.Event;
-
 /**
  * A class of boolean flags that, when set, allow the user to filter certain results from the
  * search. Each flag is initialized to 'false', by default.
@@ -39,7 +37,7 @@ public class Filter {
     }
     public void setFilterBaptismEvents(boolean mFilterBaptismEvents) {
         this.mFilterBaptismEvents = mFilterBaptismEvents;
-        Log.d(TAG, "mFilterBaptismEvents set to " + mFilterBaptismEvents);
+        Log.i(TAG, "mFilterBaptismEvents set to " + mFilterBaptismEvents);
     }
 
     private boolean mFilterBirthEvents;
@@ -48,7 +46,7 @@ public class Filter {
     }
     public void setFilterBirthEvents(boolean mFilterBirthEvents) {
         this.mFilterBirthEvents = mFilterBirthEvents;
-        Log.d(TAG, "mFilterBirthEvents set to " + mFilterBirthEvents);
+        Log.i(TAG, "mFilterBirthEvents set to " + mFilterBirthEvents);
     }
 
     private boolean mFilterCensusEvents;
@@ -57,7 +55,7 @@ public class Filter {
     }
     public void setFilterCensusEvents(boolean mFilterCensusEvents) {
         this.mFilterCensusEvents = mFilterCensusEvents;
-        Log.d(TAG, "mFilterCensusEvents set to " + mFilterCensusEvents);
+        Log.i(TAG, "mFilterCensusEvents set to " + mFilterCensusEvents);
     }
 
     private boolean mFilterChristeningEvents;
@@ -66,7 +64,7 @@ public class Filter {
     }
     public void setFilterChristeningEvents(boolean mFilterChristeningEvents) {
         this.mFilterChristeningEvents = mFilterChristeningEvents;
-        Log.d(TAG, "mFilterChristeningEvents set to " + mFilterChristeningEvents);
+        Log.i(TAG, "mFilterChristeningEvents set to " + mFilterChristeningEvents);
     }
 
     private boolean mFilterDeathEvents;
@@ -75,7 +73,7 @@ public class Filter {
     }
     public void setFilterDeathEvents(boolean mFilterDeathEvents) {
         this.mFilterDeathEvents = mFilterDeathEvents;
-        Log.d(TAG, "mFilterDeathEvents set to " + mFilterDeathEvents);
+        Log.i(TAG, "mFilterDeathEvents set to " + mFilterDeathEvents);
     }
 
     private boolean mFilterMarriageEvents;
@@ -84,7 +82,7 @@ public class Filter {
     }
     public void setFilterMarriageEvents(boolean mFilterMarriageEvents) {
         this.mFilterMarriageEvents = mFilterMarriageEvents;
-        Log.d(TAG, "mFilterMarriageEvents set to " + mFilterMarriageEvents);
+        Log.i(TAG, "mFilterMarriageEvents set to " + mFilterMarriageEvents);
     }
 
     private boolean mFilterFathersSide;
@@ -93,7 +91,7 @@ public class Filter {
     }
     public void setFilterFathersSide(boolean mFilterFathersSide) {
         this.mFilterFathersSide = mFilterFathersSide;
-        Log.d(TAG, "mFilterFathersSide set to " + mFilterFathersSide);
+        Log.i(TAG, "mFilterFathersSide set to " + mFilterFathersSide);
     }
 
     private boolean mFilterMothersSide;
@@ -102,7 +100,7 @@ public class Filter {
     }
     public void setFilterMothersSide(boolean mFilterMothersSide) {
         this.mFilterMothersSide = mFilterMothersSide;
-        Log.d(TAG, "mFilterMothersSide set to " + mFilterMothersSide);
+        Log.i(TAG, "mFilterMothersSide set to " + mFilterMothersSide);
     }
 
     private boolean mFilterMaleEvents;
@@ -111,7 +109,7 @@ public class Filter {
     }
     public void setFilterMaleEvents(boolean mFilterMaleEvents) {
         this.mFilterMaleEvents = mFilterMaleEvents;
-        Log.d(TAG, "mFilterMaleEvents set to " + mFilterMaleEvents);
+        Log.i(TAG, "mFilterMaleEvents set to " + mFilterMaleEvents);
     }
 
     private boolean mFilterFemaleEvents;
@@ -120,6 +118,6 @@ public class Filter {
     }
     public void setFilterFemaleEvents(boolean mFilterFemaleEvents) {
         this.mFilterFemaleEvents = mFilterFemaleEvents;
-        Log.d(TAG, "mFilterFemaleEvents set to " + mFilterFemaleEvents);
+        Log.i(TAG, "mFilterFemaleEvents set to " + mFilterFemaleEvents);
     }
 }

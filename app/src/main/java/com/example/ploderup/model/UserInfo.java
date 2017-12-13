@@ -79,7 +79,10 @@ public class UserInfo {
     }
 
 
-    // METHODS
+// METHODS
+    public String getURLPrefix() { return "http://" + mServerHost + ":" + mServerPort; }
+    public String getFullName() { return mFirstName + " " + mLastName; }
+
     public boolean isServerInfoValid() {
         final int MAX_PORT_NUM = 65535;
         final int MIN_PORT_NUM = 1;
@@ -105,6 +108,7 @@ public class UserInfo {
         // All tests passed
         return true;
     }
+
     public boolean isLoginInfoValid() {
         if(mUsername == null || mPassword == null) return false;
         if(mUsername.equals("") || mPassword.equals("")) return false;
@@ -114,6 +118,7 @@ public class UserInfo {
         // All tests passed
         return true;
     }
+
     public boolean isRegisterInfoValid() {
         if(mUsername == null || mPassword == null || mFirstName == null || mLastName == null ||
                 mEmail == null || mGender == null) return false;

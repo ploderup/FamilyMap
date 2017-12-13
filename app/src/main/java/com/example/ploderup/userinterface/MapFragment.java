@@ -14,22 +14,37 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.ploderup.model.FamilyMap;
+import com.example.ploderup.model.Filter;
 import com.example.ploderup.model.Settings;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+
+import Model.Event;
+import Model.Person;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 // MEMBERS
     private final String TAG = "MapFragment";
     private GoogleMap mGoogleMap;
-    private LinearLayout mEventDetails;
+    private LinearLayout mEventDisplay;
     private ImageView mEventIcon;
+    private TextView mEventPerson;
+    private TextView mEventDetails;
+
     private Settings mSettings = Settings.getInstance();
+    private Filter mFilter = Filter.getInstance();
+    private FamilyMap mFamilyMap = FamilyMap.getInstance();
 
 // METHODS
     /**
@@ -51,8 +66,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
         // Set on-click listener for event display box
-        mEventDetails = v.findViewById(R.id.event_display);
-        mEventDetails.setOnClickListener(new View.OnClickListener() {
+        mEventDisplay = v.findViewById(R.id.event_display);
+        mEventDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create PersonActivity to display information about person associated w/ event
@@ -61,6 +76,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         // Initialize event display box
+        mEventPerson = v.findViewById(R.id.event_person);
+        mEventDetails = v.findViewById(R.id.event_details);
         mEventIcon = v.findViewById(R.id.event_icon);
         mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_location));
 
@@ -150,13 +167,77 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap.setMapType(mSettings.getMapType());
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
-        // TODO: Lay down event pins
+        // Wait for DataSyncTask to finish (TODO: Find a cleaner way to do this)
+        while(!mFamilyMap.getDataSyncDone());
+
+        // Do the event markers need to be initialized?
+        Log.d(TAG, "Initializing event markers");
+        ArrayList<Event> events = mFamilyMap.getAllEvents();
+        placeEventMarkers(events);
+
+        // Set a listener for clicks on the event markers
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Event event = (Event) marker.getTag();
+                Person person = mFamilyMap.findPersonByID(event.getPersonID());
+
+                // Set the gender icon
+                if (person.getGender().equals("m")) {
+                    mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                            R.drawable.ic_male_gender));
+                } else {
+                    mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                            R.drawable.ic_female_gender));
+                }
+
+                // Set the name and information of the person associated with the event
+                mEventPerson.setText(person.getFirstName() + " " + person.getLastName());
+                mEventDetails.setText(event.getEventType().substring(0, 1).toUpperCase() +
+                        event.getEventType().substring(1) + ": " + event.getCity() + ", " +
+                        event.getCountry() + " (" + event.getYear() + ")");
+
+                return false;
+            }
+        });
+
+        // TODO: Do any of the event markers need to be hidden?
 
         // TODO: Draw map lines
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    /**
+     * Draws an event pin on the map for each event given.
+     * @param events an array-list of events
+     */
+    private void placeEventMarkers(ArrayList<Event> events) {
+        if(events == null) return;
+
+        Log.d(TAG, "Drawing an event pin on the map");
+        for(Event event : events) {
+            // What color should the event pin be?
+            float event_color;
+            switch(event.getEventType().toLowerCase()) {
+                case "baptism":     event_color = BitmapDescriptorFactory.HUE_BLUE; break;
+                case "birth":       event_color = BitmapDescriptorFactory.HUE_RED; break;
+                case "census":      event_color = BitmapDescriptorFactory.HUE_GREEN; break;
+                case "christening": event_color = BitmapDescriptorFactory.HUE_ORANGE; break;
+                case "marriage":    event_color = BitmapDescriptorFactory.HUE_CYAN; break;
+                case "death":       event_color = BitmapDescriptorFactory.HUE_VIOLET; break;
+                default:            event_color = BitmapDescriptorFactory.HUE_YELLOW; break;
+            }
+
+            // Where did the event take place?
+            LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
+
+            // Drop a pin for the event
+            Marker marker = mGoogleMap
+                    .addMarker(new MarkerOptions()
+                            .position(location)
+                            .icon(BitmapDescriptorFactory.defaultMarker(event_color)));
+            marker.setTag(event);
+            if(event.getEventType().equals("baptism")) marker.setVisible(false);
+        }
     }
 }

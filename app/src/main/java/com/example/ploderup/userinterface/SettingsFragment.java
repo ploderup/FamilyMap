@@ -1,9 +1,11 @@
 package com.example.ploderup.userinterface;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.example.ploderup.communication.DataSyncTask;
 import com.example.ploderup.communication.ServerProxy;
 import com.example.ploderup.model.Settings;
 import com.google.android.gms.maps.GoogleMap;
@@ -174,7 +177,9 @@ public class SettingsFragment extends Fragment {
         mResyncDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Re-sync data in cache with FamilyMap server
+                // Re-sync data in cache with FamilyMap server
+                new DataSyncTask((AppCompatActivity) getActivity()).execute();
+                getActivity().finish();
             }
         });
 
@@ -184,7 +189,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Log the user out of FamilyMap
-                //TODO: ServerProxy.logoutUser();
+                startActivity(new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
 

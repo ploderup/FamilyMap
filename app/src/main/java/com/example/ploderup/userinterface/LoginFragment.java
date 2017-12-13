@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,17 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.ploderup.communication.DataSyncTask;
 import com.example.ploderup.communication.LoginTask;
 import com.example.ploderup.communication.RegisterTask;
+import com.example.ploderup.model.Settings;
 import com.example.ploderup.model.UserInfo;
 
 public class LoginFragment extends Fragment {
 // MEMBERS
     private final String TAG = "LoginFragment";
-    private UserInfo mUserInfo;
+    private UserInfo mUserInfo = UserInfo.getInstance();
+    private Settings mSettings = Settings.getInstance();
 
 // METHODS
     /**
@@ -51,9 +55,6 @@ public class LoginFragment extends Fragment {
 
         // Inflate the fragment's layout
         View v = inflater.inflate(R.layout.fragment_login, container, false);
-
-        // Retrieve class for user input
-        mUserInfo = UserInfo.getInstance();
 
         // Wire-up all widgets
         mHostField = v.findViewById(R.id.host_edit_text);
@@ -217,6 +218,8 @@ public class LoginFragment extends Fragment {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Login button pressed");
+
                 if(mUserInfo.isServerInfoValid()) {
                     if(mUserInfo.isLoginInfoValid()) {
                         // Attempt to log the user in

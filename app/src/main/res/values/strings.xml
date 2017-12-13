@@ -30,6 +30,13 @@
 
 
     <!--==============-->
+    <!-- DataSyncTask -->
+    <!--==============-->
+    <string name="sync_successful_toast">Sync successful</string>
+    <string name="sync_failed_toast">Sync failed</string>
+
+
+    <!--==============-->
     <!-- Map Fragment -->
     <!--==============-->
     <string name="click_a_marker_top">Click on a marker</string>
