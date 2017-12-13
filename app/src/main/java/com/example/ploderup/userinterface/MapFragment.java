@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -44,6 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Person mCurrentPerson;
 
     private ArrayList<Marker> mEventMarkers;
+    private ArrayList<Polyline> mRelationshipLines;
 
     private Settings mSettings = Settings.getInstance();
     private Filter mFilter = Filter.getInstance();
@@ -73,8 +76,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mEventDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Create PersonActivity to display information about person associated w/ event
-                getActivity().startActivity(new Intent(getActivity(), PersonActivity.class));
+                // Has a person been selected?
+                if (mCurrentPerson != null)
+                    // Create PersonActivity to display information about person associated w/ event
+                    getActivity().startActivity(new Intent(getActivity(), PersonActivity.class)
+                            .putExtra("first_name", mCurrentPerson.getFirstName())
+                            .putExtra("last_name", mCurrentPerson.getLastName())
+                            .putExtra("gender", mCurrentPerson.getGender()));
             }
         });
 
@@ -125,10 +133,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 case R.id.search_menu_item:
                     // Start a SearchActivity
-                    getActivity().startActivity(new Intent(getActivity(), SearchActivity.class)
-                            .putExtra("first_name", mCurrentPerson.getFirstName())
-                            .putExtra("last_name", mCurrentPerson.getLastName())
-                            .putExtra("gender", mCurrentPerson.getGender()));
+                    getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
                     break;
 
                 case R.id.settings_menu_item:
@@ -145,8 +150,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // ...or MapActivity
         } else {
             switch(item.getItemId()) {
-                case R.id.back_menu_item:
-                    // Return to the previous activity
+                case android.R.id.home:
+                    getActivity().finish();
                     break;
 
                 case R.id.top_menu_item:
@@ -187,6 +192,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Event event = (Event) marker.getTag();
                 Person person = mFamilyMap.findPersonByID(event.getPersonID());
 
+                // Erase all relationship lines currently on the map
+
+
                 // Set the gender icon
                 if (person.getGender().equals("m")) {
                     mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
@@ -205,12 +213,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 // Update mCurrentPerson
                 mCurrentPerson = person;
 
+                // Draw relationship lines
+                drawRelationshipLines(marker);
+
                 return false;
             }
         });
-
-        // TODO: Draw map lines
-
     }
 
     /**
@@ -241,10 +249,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
 
             // Drop a marker for the event
-            Marker marker = mGoogleMap
-                    .addMarker(new MarkerOptions()
-                            .position(location)
-                            .icon(BitmapDescriptorFactory.defaultMarker(event_color)));
+            Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .icon(BitmapDescriptorFactory.defaultMarker(event_color)));
             marker.setTag(event);
 
             // Add the marker to an array-list
@@ -253,7 +260,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Sets marker visibility based upon whether it should be filtered or not.
+     * Sets marker visibility based upon filters set by the user.
      */
     private void updateEventMarkers() {
         Log.i(TAG, "Updating event markers");
@@ -261,5 +268,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // Should this marker be visible on the map (i.e., is it filtered?)
             marker.setVisible(!mFamilyMap.isFiltered((Event) marker.getTag()));
         }
+    }
+
+    /**
+     * Draws lines between event markers as if all lines were enabled.
+     */
+    private void drawRelationshipLines(Marker marker) {
+        // Initialize the array-list of lines, if necessary
+        if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
+
+        // Is the current person married?
+        if (mCurrentPerson.getSpouseID() != null) {
+            // Retrieve the person's spouse
+            Person spouse = mFamilyMap.findPersonByID(mCurrentPerson.getSpouseID());
+
+            // Draw a line from the marker to the person's spouse's earliest event
+            Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                    .);
+
+        }
+
+
     }
 }

@@ -187,4 +187,14 @@ public class FamilyMap {
         // No one was found with the given ID
         return result;
     }
+
+    /**
+     * Retrieves the earliest event associated with the given person, where events are ordered
+     * chronologically, as follows: Birth events, events with years (ordered by event-type,
+     * alphabetically), events without years (ordered by event-type, alphabetically), death events.
+     */
+    public Event getPersonsEarliestEvent(String person_id) {
+        // TODO: Write this method
+        return null;
+    }
 }

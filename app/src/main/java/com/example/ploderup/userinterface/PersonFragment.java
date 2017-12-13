@@ -44,7 +44,11 @@ public class PersonFragment extends Fragment {
             Bundle bundle = getArguments();
             mFirstNameTextView.setText(bundle.getString("first_name"));
             mLastNameTextView.setText(bundle.getString("last_name"));
-            mGenderTextView.setText(bundle.getString("gender"));
+            switch(bundle.getString("gender")) {
+                case "m": mGenderTextView.setText(R.string.male_gender_detail); break;
+                case "f": mGenderTextView.setText(R.string.female_gender_detail); break;
+                default: Log.e(TAG, "Invalid gender passed by Intent");
+            }
         }
 
         return v;
