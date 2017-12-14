@@ -114,6 +114,12 @@ public class Person {
     public void setLastName(String ln) { lastName = ln; }
 
     /**
+     * Concatenates the first name of the person with its last name.
+     * @return firstName + " " + lastName
+     */
+    public String getFullName() { return firstName + " " + lastName; }
+
+    /**
      * GENDER:
      * A non-empty string; either "m" or "f".
      */

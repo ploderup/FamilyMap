@@ -16,7 +16,7 @@ public class PersonDAO {
      * CREATE:
      * Corresponds with the INSERT statement in SQL. Checks first to confirm that the person given
 	 * is unique and that the descendant (user) of that person exists already in the database. Then,
-     * the method checks to confirm that all non-null IDs (father, etcetera) exist in the database.
+     * the method checks to confirm that all non-null IDs  (father + e.getMessage()tcetera) exist in the database.
 	 * Finally, the person is added to the database.
 	 *
 	 * @param person, a Person object
@@ -59,7 +59,7 @@ public class PersonDAO {
             statement.executeUpdate();
 
         } catch(SQLException e) {
-            throw new DatabaseException("Method PersonDAO.create failed due to SQLException", e);
+            throw new DatabaseException("Method PersonDAO.create failed due to SQLException " + e.getMessage());
         }
 	}
 
@@ -185,7 +185,7 @@ public class PersonDAO {
             return person;
 
         } catch(SQLException e) {
-            throw new DatabaseException("PersonDAO.readPerson failed.", e);
+            throw new DatabaseException("PersonDAO.readPerson failed. " + e.getMessage());
         }
     }
 
@@ -243,7 +243,7 @@ public class PersonDAO {
             return family;
 
         } catch(SQLException e) {
-            throw new DatabaseException("PersonDAO.readFamily failed.", e);
+            throw new DatabaseException("PersonDAO.readFamily failed. " + e.getMessage());
         }
     }
 
@@ -302,7 +302,44 @@ public class PersonDAO {
             return person;
 
         } catch(SQLException e) {
-            throw new DatabaseException("PersonDAO.readPerson failed.", e);
+            throw new DatabaseException("PersonDAO.readPerson failed. " + e.getMessage());
+        }
+    }
+
+    /**
+     * UPDATE:
+     * Updates a person's (in PersonTable) spouse ID entry.
+     *
+     * @param person_id a non-empty string referencing a valid person
+     * @param spouse_id a non-empty string referencing the person's spouse
+     * @throws DatabaseException
+     */
+    public static void updateSpouseID(String person_id, String spouse_id) throws DatabaseException {
+        // check input
+        if (person_id == null)
+            throw new DatabaseException("Method PersonDAO.update passed null pointer");
+        if (person_id.equals(""))
+            throw new DatabaseException("Method PersonDAO.update passed empty string");
+
+        // update person
+        try {
+            // declarations
+            String sql;
+            PreparedStatement statement;
+
+            // prepare statement
+            sql = "UPDATE " + TABLE_NAME + " SET spouse_id = ? WHERE person_id = ?";
+            statement = Database.getInstance().getConnection().prepareStatement(sql);
+
+            // fill statement
+            statement.setString(0, spouse_id);
+            statement.setString(1, person_id);
+
+            // execute statement
+            statement.executeUpdate();
+
+        } catch(SQLException e) {
+            throw new DatabaseException("Method PersonDAO.delete failed. " + e.getMessage());
         }
     }
 
@@ -338,7 +375,7 @@ public class PersonDAO {
             statement.executeUpdate();
 
         } catch(SQLException e) {
-            throw new DatabaseException("Method PersonDAO.delete failed.", e);
+            throw new DatabaseException("Method PersonDAO.delete failed. " + e.getMessage());
         }
     }
 

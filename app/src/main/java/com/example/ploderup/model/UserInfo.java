@@ -1,9 +1,5 @@
 package com.example.ploderup.model;
 
-/**
- * Created by ploderup on 12/5/17.
- */
-
 public class UserInfo {
 // SINGLETON STUFF
     private static UserInfo mUserInfo;

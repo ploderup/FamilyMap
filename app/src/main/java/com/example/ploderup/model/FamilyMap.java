@@ -2,6 +2,8 @@ package com.example.ploderup.model;
 
 import android.util.Log;
 
+import com.example.ploderup.userinterface.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -194,7 +196,80 @@ public class FamilyMap {
      * alphabetically), events without years (ordered by event-type, alphabetically), death events.
      */
     public Event getPersonsEarliestEvent(String person_id) {
-        // TODO: Write this method
+        if (person_id == null) {
+            Log.e(TAG, "Null pointer passed to getPersonsEarliestEvent");
+            return null;
+        }
+        if (person_id.equals("")) {
+            Log.e(TAG, "Empty string passed to getPersonsEarliestEvent");
+            return null;
+        }
+
+        ArrayList<Event> events = new ArrayList<>();
+        Event earliest_event = null;
+
+        // Get all events associated with the person associated with the given ID
+        for (Event event : mAllEvents) {
+            if (event.getPersonID().equals(person_id)) events.add(event);
+        }
+
+        // How many events were found?
+        switch(events.size()) {
+            case 0: return null;
+            case 1: return events.get(0);
+            default: // Multiple events were found
+        }
+
+        // Does this person have a birth event?
+        for (Event event : events) {
+            if (event.getEventType().equalsIgnoreCase("birth")) return event;
+        }
+
+        // Do any of the events have years associated with them?
+        for (Event event : events) {
+            // Does the event have a valid year?
+            if (event.getYear() > 0) {
+                // Does 'earliest event' need to be initialized?
+                if (earliest_event == null) {
+                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
+
+                // It's already initialized; is its year later than 'event's?
+                } else if (event.getYear() < earliest_event.getYear()) {
+                    // Then set it as the new 'earliest event
+                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
+
+                // Is it's year equal to 'event's?
+                } else if (event.getYear() == earliest_event.getYear()) {
+                    // Alphabetically, does 'event's type precede 'earliest event's type?
+                    if (event.getEventType().compareToIgnoreCase(earliest_event.getEventType()) < 0)
+                        if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
+                }
+            }
+        }
+
+        // Was an event found?
+        if (earliest_event != null) return earliest_event;
+
+        // Are there any not-death events without years?
+        for (Event event : events) {
+            // Does 'earliest event' need to be initialized?
+            if (earliest_event == null) {
+                if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
+
+            // It's already initialized; is 'event's type lexicographically less than 'earliest's?
+            } else {
+                if (event.getEventType().compareToIgnoreCase(earliest_event.getEventType()) < 0)
+                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
+            }
+        }
+
+        // Was an event found?
+        if (earliest_event != null) return earliest_event;
+
+        // At this point, if there was no birth event, nor any not-death events there could only
+        // have been one event: death. A single death event would have been caught by the switch
+        // performed earlier. So, this point in code should never be reached.
+        Log.e(TAG, "Event checks failed");
         return null;
     }
 }

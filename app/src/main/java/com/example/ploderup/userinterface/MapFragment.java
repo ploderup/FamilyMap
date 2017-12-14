@@ -192,8 +192,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Event event = (Event) marker.getTag();
                 Person person = mFamilyMap.findPersonByID(event.getPersonID());
 
-                // Erase all relationship lines currently on the map
+                // TODO: Erase all relationship lines currently on the map
 
+                // Update mCurrentPerson
+                mCurrentPerson = person;
 
                 // Set the gender icon
                 if (person.getGender().equals("m")) {
@@ -205,13 +207,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 // Set the name and information of the person associated with the event
-                mEventPerson.setText(person.getFirstName() + " " + person.getLastName());
+                mEventPerson.setText(mCurrentPerson.getFullName());
                 mEventDetails.setText(event.getEventType().substring(0, 1).toUpperCase() +
                         event.getEventType().substring(1) + ": " + event.getCity() + ", " +
                         event.getCountry() + " (" + event.getYear() + ")");
 
-                // Update mCurrentPerson
-                mCurrentPerson = person;
 
                 // Draw relationship lines
                 drawRelationshipLines(marker);
@@ -271,23 +271,70 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Draws lines between event markers as if all lines were enabled.
+     * Based on the marker just selected, draws lines enabled by settings on the map.
      */
     private void drawRelationshipLines(Marker marker) {
         // Initialize the array-list of lines, if necessary
         if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
 
+        // Are spouse lines enabled?
+        if (mSettings.getSpouseLinesEnabled()) drawSpouseLine(marker.getPosition());
+
+        // Are family tree lines enabled?
+        if (mSettings.getFamilyTreeLinesEnabled()) drawFamilyTreeLines();
+
+        // Are life-story lines enabled?
+        if (mSettings.getLifeStoryLinesEnabled()) drawLifeStoryLines();
+    }
+
+    /**
+     * Draws a line between the event just selected, and the earliest event associated with the
+     * spouse of the person connected to the selected event.
+     */
+    private void drawSpouseLine(LatLng location_a) {
+        Log.i(TAG, "Drawing a spouse line for " + mCurrentPerson.getFullName());
+
         // Is the current person married?
         if (mCurrentPerson.getSpouseID() != null) {
-            // Retrieve the person's spouse
-            Person spouse = mFamilyMap.findPersonByID(mCurrentPerson.getSpouseID());
+            // Retrieve the person's spouse's earliest event
+            Event spouses_event = mFamilyMap.getPersonsEarliestEvent(mCurrentPerson.getSpouseID());
+            if (spouses_event == null) return;
+
+            Log.d(TAG, "...whose spouse is " + mFamilyMap.findPersonByID(mCurrentPerson.getSpouseID()).getFullName());
+            Log.d(TAG, "...whose earliest event is [" + spouses_event.getEventType() + "], in " + spouses_event.getCity() + ", " + spouses_event.getCountry() + " (" + spouses_event.getYear() + ")");
+
+            // Get the location of the event just retrieved
+            LatLng location_b = new LatLng(spouses_event.getLatitude(),
+                    spouses_event.getLongitude());
 
             // Draw a line from the marker to the person's spouse's earliest event
             Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-                    .);
+                    .add(location_a, location_b));
 
+            // Set the color of the line to match user preferences in settings
+            line.setColor(mSettings.getSpouseLinesColor());
+
+            // Add line to array-list of all lines
+            mRelationshipLines.add(line);
+        } else {
+            Log.d(TAG, "mCurrentPerson.getSpouseID = " + mCurrentPerson.getSpouseID());
+            Log.d(TAG, "mCurrentPerson.getFatherID = " + mCurrentPerson.getFatherID());
+            Log.d(TAG, "mCurrentPerson.getMotherID = " + mCurrentPerson.getMotherID());
         }
+    }
 
+
+    /**
+     * Draws a line between the event just selected,
+     */
+    private void drawFamilyTreeLines() {
+
+    }
+
+    /**
+     * Draws a line between the event just selected,
+     */
+    private void drawLifeStoryLines() {
 
     }
 }
