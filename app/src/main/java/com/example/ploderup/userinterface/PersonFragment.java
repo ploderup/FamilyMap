@@ -3,6 +3,7 @@ package com.example.ploderup.userinterface;
 import android.content.ReceiverCallNotAllowedException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import Model.Event;
@@ -30,16 +32,16 @@ public class PersonFragment extends Fragment {
     // MEMBERS
     private final String TAG = "PersonFragment";
 
-    private FamilyMap sFamilyMap = FamilyMap.getInstance();
-
     private TextView mFirstNameTextView;
     private TextView mLastNameTextView;
     private TextView mGenderTextView;
     private RecyclerView mLifeEventsRecyclerView;
     private RecyclerView mFamilyMemberRecyclerView;
 
+    private FamilyMap sFamilyMap = FamilyMap.getInstance();
 
-    // METHODS
+
+// METHODS
     @Override
     public void onCreate(Bundle saved_instance_state) {
         super.onCreate(saved_instance_state);
@@ -104,35 +106,83 @@ public class PersonFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
 // INNER CLASSES
-    private class Holder extends RecyclerView.ViewHolder {
+    private class PersonHolder extends RecyclerView.ViewHolder {
+        private String mRelationship;
+        private Person mPerson;
+
         private ImageView mIcon;
         private TextView mTitle;
         private TextView mDetails;
 
-        public Holder(LayoutInflater inflater, ViewGroup parent) {
+        public PersonHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_person, parent, false));
+
+            // Wire-up widgets
             mIcon = parent.findViewById(R.id.list_item_icon);
             mTitle = parent.findViewById(R.id.list_item_title);
             mDetails = parent.findViewById(R.id.list_item_details);
         }
+
+        public void bind(String r, Person p) {
+            mRelationship = r;
+            mPerson = p;
+
+            if (mPerson.getGender().equalsIgnoreCase("m")) mIcon.setImageDrawable(
+                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_male_gender));
+            else mIcon.setImageDrawable(
+                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_female_gender));
+            mTitle.setText(mPerson.getFullName());
+            mDetails.setText(mRelationship);
+        }
     }
 
-    private class PersonListAdapter extends RecyclerView.Adapter<Holder> {
-        private ArrayList<Person> mFamilyMembers;
+    private class EventHolder extends RecyclerView.ViewHolder {
+        private Event mEvent;
+        private String mPersonFullName;
 
-        public PersonListAdapter(ArrayList<Person> mFamilyMembers) {
+        private ImageView mIcon;
+        private TextView mTitle;
+        private TextView mDetails;
+
+        public EventHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.list_item_person, parent, false));
+
+            // Wire-up widgets
+            mIcon = parent.findViewById(R.id.list_item_icon);
+            mTitle = parent.findViewById(R.id.list_item_title);
+            mDetails = parent.findViewById(R.id.list_item_details);
+        }
+
+        public void bind(Event e) {
+            mEvent = e;
+            mPersonFullName = sFamilyMap.findPersonByID(e.getPersonID()).getFullName();
+
+            mIcon.setImageDrawable(
+                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_location));
+            mTitle.setText(mEvent.getEventType().substring(0,1).toUpperCase() +
+                    mEvent.getEventType().substring(1).toLowerCase() + ": " + mEvent.getCity() +
+                    ", " + mEvent.getCountry() + " (" + mEvent.getYear() + ")");
+            mDetails.setText(mPersonFullName);
+        }
+    }
+
+    private class PersonListAdapter extends RecyclerView.Adapter<PersonHolder> {
+        private HashMap<String, Person> mFamilyMembers;
+
+        public PersonListAdapter(HashMap<String, Person> mFamilyMembers) {
             this.mFamilyMembers = mFamilyMembers;
         }
 
         @Override
-        public Holder onCreateViewHolder(ViewGroup parent, int view_type) {
+        public PersonHolder onCreateViewHolder(ViewGroup parent, int view_type) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new Holder(inflater, parent);
+            return new PersonHolder(inflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(Holder holder, int position) {
+        public void onBindViewHolder(PersonHolder holder, int position) {
 
         }
 
@@ -142,7 +192,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    private class EventListAdapter extends RecyclerView.Adapter<Holder> {
+    private class EventListAdapter extends RecyclerView.Adapter<EventHolder> {
         private ArrayList<Event> mPersonEvents;
 
         public EventListAdapter(ArrayList<Event> mPersonEvents) {
@@ -150,14 +200,14 @@ public class PersonFragment extends Fragment {
         }
 
         @Override
-        public Holder onCreateViewHolder(ViewGroup parent, int view_type) {
+        public EventHolder onCreateViewHolder(ViewGroup parent, int view_type) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new Holder(inflater, parent);
+            return new EventHolder(inflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(Holder holder, int position) {
-
+        public void onBindViewHolder(EventHolder holder, int position) {
+            holder.bind(mPersonEvents.get(position));
         }
 
         @Override

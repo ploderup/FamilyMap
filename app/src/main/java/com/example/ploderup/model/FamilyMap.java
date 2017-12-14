@@ -6,6 +6,7 @@ import com.example.ploderup.userinterface.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import Model.Event;
@@ -201,7 +202,7 @@ public class FamilyMap {
     /**
      * Retrieves all parents, spouse and children for the person associated with the given ID.
      */
-    public ArrayList<Person> getPersonsFamily(String person_id) {
+    public HashMap<String, Person> getPersonsFamily(String person_id) {
         if (person_id == null) {
             Log.e(TAG, "Null pointer passed to getPersonsFamily");
             return null;
@@ -215,24 +216,30 @@ public class FamilyMap {
                     "app memory");
         }
 
-        ArrayList<Person> family = new ArrayList<>();
+        HashMap<String, Person> family = new HashMap<>();
+        Person person = findPersonByID(person_id);
 
         // Does the person have a father?
         if (findPersonByID(person_id).getFatherID() != null)
-            family.add(findPersonByID(findPersonByID(person_id).getFatherID()));
+            family.put("Father", findPersonByID(person.getFatherID()));
 
         // Does the person have a mother?
-        if (findPersonByID(person_id).getMotherID() != null)
-            family.add(findPersonByID(findPersonByID(person_id).getMotherID()));
+        if (person.getMotherID() != null)
+            family.put("Mother", findPersonByID(person.getMotherID()));
 
         // Does the person have a spouse?
-        if (findPersonByID(person_id).getSpouseID() != null)
-            family.add(findPersonByID(findPersonByID(person_id).getSpouseID()));
+        if (person.getSpouseID() != null)
+            if (findPersonByID(person.getSpouseID()).getGender().equalsIgnoreCase("m"))
+                family.put("Husband", findPersonByID(person.getSpouseID()));
+            else
+                family.put("Wife", findPersonByID(person.getSpouseID()));
 
         // Does the person have any children?
-        for (Person person : mAllPeople) {
-            if (person.getFatherID().equals(person_id) || person.getMotherID().equals(person_id))
-                family.add(person);
+        for (Person p : mAllPeople) {
+            if (person.getFatherID() != null && person.getFatherID().equals(person_id) ||
+                    person.getMotherID() != null && person.getMotherID().equals(person_id))
+                if (p.getGender().equalsIgnoreCase("m"))
+                    family.put("Brother", person); else family.put("Sister", person);
         }
 
         return family;

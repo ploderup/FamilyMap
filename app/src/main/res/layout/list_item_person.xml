@@ -21,14 +21,12 @@
         <TextView android:id="@+id/list_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DEMO"
-            android:textStyle="bold"
+            android:textColor="@color/black"
             android:textSize="15sp"/>
 
         <TextView android:id="@+id/list_item_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TEST"
             android:textSize="12sp"/>
 
     </LinearLayout>
