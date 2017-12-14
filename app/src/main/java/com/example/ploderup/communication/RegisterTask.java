@@ -77,7 +77,7 @@ public class RegisterTask extends AsyncTask<Void, Void, Boolean> {
         // Was the registration successful?
         if (result) {
             Toast.makeText(mParentActivity,
-                    mParentActivity.getString(R.string.login_successful_toast,
+                    mParentActivity.getString(R.string.register_successful_toast,
                             mUserInfo.getFullName()), Toast.LENGTH_SHORT).show();
 
             // Sync data with the server
@@ -93,7 +93,7 @@ public class RegisterTask extends AsyncTask<Void, Void, Boolean> {
         } else {
             mServerProxy.setAuthToken(null);
             mServerProxy.setRootPersonID(null);
-            Toast.makeText(mParentActivity, R.string.login_failed_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mParentActivity, R.string.register_failed_toast, Toast.LENGTH_SHORT).show();
         }
     }
 }

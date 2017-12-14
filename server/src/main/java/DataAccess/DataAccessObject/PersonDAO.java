@@ -332,8 +332,8 @@ public class PersonDAO {
             statement = Database.getInstance().getConnection().prepareStatement(sql);
 
             // fill statement
-            statement.setString(0, spouse_id);
-            statement.setString(1, person_id);
+            statement.setString(1, spouse_id);
+            statement.setString(2, person_id);
 
             // execute statement
             statement.executeUpdate();

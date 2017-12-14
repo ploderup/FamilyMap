@@ -71,7 +71,12 @@ public class SettingsFragment extends Fragment {
                 new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSettings.setLifeStoryLinesColor(getHexFromIndex(position));
+                switch(position) {
+                    case 0: mSettings.setLifeStoryLinesColor(Color.RED); break;
+                    case 1: mSettings.setLifeStoryLinesColor(Color.GREEN); break;
+                    case 2: mSettings.setLifeStoryLinesColor(Color.BLUE); break;
+                    default: // Do nothing
+                }
             }
 
             @Override
@@ -103,7 +108,12 @@ public class SettingsFragment extends Fragment {
                 new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSettings.setFamilyTreeLinesColor(getHexFromIndex(position));
+                switch(position) {
+                    case 0: mSettings.setFamilyTreeLinesColor(Color.RED); break;
+                    case 1: mSettings.setFamilyTreeLinesColor(Color.GREEN); break;
+                    case 2: mSettings.setFamilyTreeLinesColor(Color.BLUE); break;
+                    default: // Do nothing
+                }
             }
 
             @Override
@@ -133,7 +143,12 @@ public class SettingsFragment extends Fragment {
         mSpouseLineColorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSettings.setSpouseLinesColor(getHexFromIndex(position));
+                switch(position) {
+                    case 0: mSettings.setSpouseLinesColor(Color.RED); break;
+                    case 1: mSettings.setSpouseLinesColor(Color.GREEN); break;
+                    case 2: mSettings.setSpouseLinesColor(Color.BLUE); break;
+                    default: // Do nothing
+                }
             }
 
             @Override
@@ -217,13 +232,13 @@ public class SettingsFragment extends Fragment {
      */
     private int getColorSpinnerIndex(int color_value) {
         switch(color_value) {
-            case R.color.red:
+            case Color.RED:
                 return 0;
 
-            case R.color.green:
+            case Color.GREEN:
                 return 1;
 
-            case R.color.blue:
+            case Color.BLUE:
                 return 2;
 
             // Invalid color provided
@@ -239,13 +254,13 @@ public class SettingsFragment extends Fragment {
     private int getHexFromIndex(int spinner_index) {
         switch(spinner_index) {
             case 0:
-                return R.color.red;
+                return Color.RED;
 
             case 1:
-                return R.color.green;
+                return Color.GREEN;
 
             case 2:
-                return R.color.blue;
+                return Color.BLUE;
 
             default:
                 return 0;

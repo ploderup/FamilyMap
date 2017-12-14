@@ -241,12 +241,8 @@ public class EventDAO {
             create(marriage2);
 
             // link spouses
-            System.out.println("Linking couple [" + PersonDAO.read(person_id1).getPersonID() + "] and [" + PersonDAO.read(person_id2).getPersonID() + "] together");
-            System.out.println("Person one's spouse ID: " + PersonDAO.read(person_id1).getSpouseID());
             PersonDAO.updateSpouseID(person_id1, person_id2);
-            System.out.println("Person one's spouse ID: " + PersonDAO.read(person_id1).getSpouseID());
-            System.out.println();
-            PersonDAO.read(person_id2).setSpouseID(person_id1);
+            PersonDAO.updateSpouseID(person_id2, person_id1);
 
             return EVENT_ADDED;
 

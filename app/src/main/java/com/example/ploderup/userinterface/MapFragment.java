@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import com.example.ploderup.model.FamilyMap;
 import com.example.ploderup.model.Filter;
 import com.example.ploderup.model.Settings;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,6 +29,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import Model.Event;
 import Model.Person;
@@ -192,7 +191,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Event event = (Event) marker.getTag();
                 Person person = mFamilyMap.findPersonByID(event.getPersonID());
 
-                // TODO: Erase all relationship lines currently on the map
+                // Initialize the array-list of lines, if necessary
+                if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
+
+                // Erase all relationship lines currently on the map
+                for (Iterator<Polyline> iterator = mRelationshipLines.iterator();
+                     iterator.hasNext();) {
+                    iterator.next().remove();
+                    iterator.remove();
+                }
 
                 // Update mCurrentPerson
                 mCurrentPerson = person;
@@ -274,9 +281,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * Based on the marker just selected, draws lines enabled by settings on the map.
      */
     private void drawRelationshipLines(Marker marker) {
-        // Initialize the array-list of lines, if necessary
-        if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
-
         // Are spouse lines enabled?
         if (mSettings.getSpouseLinesEnabled()) drawSpouseLine(marker.getPosition());
 
@@ -309,10 +313,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             // Draw a line from the marker to the person's spouse's earliest event
             Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
-                    .add(location_a, location_b));
-
-            // Set the color of the line to match user preferences in settings
-            line.setColor(mSettings.getSpouseLinesColor());
+                    .add(location_a, location_b)
+                    .color(mSettings.getSpouseLinesColor()));
 
             // Add line to array-list of all lines
             mRelationshipLines.add(line);
@@ -322,7 +324,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Log.d(TAG, "mCurrentPerson.getMotherID = " + mCurrentPerson.getMotherID());
         }
     }
-
 
     /**
      * Draws a line between the event just selected,
