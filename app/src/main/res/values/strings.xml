@@ -105,7 +105,7 @@
     <string name="person_lname_detail">Last name</string>
     <string name="person_gender_detail">Gender</string>
     <string name="male_gender_detail">Male</string>
-    <string name="female_gender_detail">Femal</string>
+    <string name="female_gender_detail">Female</string>
 
     <!--==============-->
     <!-- Menu Options -->

@@ -13,14 +13,7 @@ public class Settings {
 // SINGLETON STUFF
     private static Settings mSettings;
     private Settings() {
-        // Initialize settings
-        mLifeStoryLinesEnabled = true;
-        mLifeStoryLinesColor = GREEN;
-        mFamilyTreeLinesEnabled = false;
-        mFamilyTreeLinesColor = BLUE;
-        mSpouseLinesEnabled = false;
-        mSpouseLinesColor = RED;
-        mMapType = MAP_TYPE_NORMAL;
+        resetAllSettings();
         mLoggedIn = false;
     }
     public static Settings getInstance() {
@@ -126,5 +119,19 @@ public class Settings {
     public void setLoggedIn(boolean mLoggedIn) {
         this.mLoggedIn = mLoggedIn;
         Log.i(TAG, "mLoggedIn set to " + mLoggedIn);
+    }
+
+// METHODS
+    /**
+     * Resets all class members (except mLoggedIn) to their default values.
+     */
+    public void resetAllSettings() {
+        mLifeStoryLinesEnabled = true;
+        mLifeStoryLinesColor = GREEN;
+        mFamilyTreeLinesEnabled = false;
+        mFamilyTreeLinesColor = BLUE;
+        mSpouseLinesEnabled = false;
+        mSpouseLinesColor = RED;
+        mMapType = MAP_TYPE_NORMAL;
     }
 }

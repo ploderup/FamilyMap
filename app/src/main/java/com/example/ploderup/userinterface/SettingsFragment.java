@@ -22,17 +22,19 @@ import android.widget.Switch;
 
 import com.example.ploderup.communication.DataSyncTask;
 import com.example.ploderup.communication.ServerProxy;
+import com.example.ploderup.model.FamilyMap;
+import com.example.ploderup.model.Filter;
 import com.example.ploderup.model.Settings;
+import com.example.ploderup.model.UserInfo;
 import com.google.android.gms.maps.GoogleMap;
 
 public class SettingsFragment extends Fragment {
 // MEMBERS
     private final String TAG = "SettingsFragment";
 
-    // Models
     private Settings mSettings = Settings.getInstance();
+    private ServerProxy mServerProxy = ServerProxy.getInstance();
 
-    // Widgets
     private Spinner mLifeStoryLineColorSpinner;
     private Switch mLifeStoryLineSwitch;
     private Spinner mFamilyTreeLineColorSpinner;
@@ -204,7 +206,10 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Log the user out of FamilyMap
-                startActivity(new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                mServerProxy.logoutUser();
+
+                startActivity(new Intent(getActivity(), MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
         });
 

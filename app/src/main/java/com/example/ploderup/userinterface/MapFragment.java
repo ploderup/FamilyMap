@@ -15,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.ploderup.communication.ServerProxy;
 import com.example.ploderup.model.FamilyMap;
 import com.example.ploderup.model.Filter;
+import com.example.ploderup.model.Search;
 import com.example.ploderup.model.Settings;
+import com.example.ploderup.model.UserInfo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -44,12 +47,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private TextView mEventDetails;
     private Person mCurrentPerson;
 
+    private Marker mCurrentMarker;
     private ArrayList<Marker> mEventMarkers;
     private ArrayList<Polyline> mRelationshipLines;
 
-    private Settings mSettings = Settings.getInstance();
-    private Filter mFilter = Filter.getInstance();
     private FamilyMap mFamilyMap = FamilyMap.getInstance();
+    private Settings mSettings = Settings.getInstance();
 
 // METHODS
     /**
@@ -79,6 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (mCurrentPerson != null)
                     // Create PersonActivity to display information about person associated w/ event
                     getActivity().startActivity(new Intent(getActivity(), PersonActivity.class)
+                            .putExtra("person_id", mCurrentPerson.getPersonID())
                             .putExtra("first_name", mCurrentPerson.getFirstName())
                             .putExtra("last_name", mCurrentPerson.getLastName())
                             .putExtra("gender", mCurrentPerson.getGender()));
@@ -103,7 +107,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // TODO: Update the map
+        // Update the information in the box at the bottom of the screen
+        updateEventDisplayBox();
     }
 
     @Override
@@ -184,44 +189,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (mEventMarkers == null)
             placeEventMarkers(mFamilyMap.getAllEvents()); else updateEventMarkers();
 
+        // Is there a marker to place lines for?
+        if (mCurrentMarker != null) updateRelationshipLines();
+
         // Set a listener for clicks on the event markers
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                // Update mCurrentMarker
+                mCurrentMarker = marker;
                 Event event = (Event) marker.getTag();
-                Person person = mFamilyMap.findPersonByID(event.getPersonID());
-
-                // Initialize the array-list of lines, if necessary
-                if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
-
-                // Erase all relationship lines currently on the map
-                for (Iterator<Polyline> iterator = mRelationshipLines.iterator();
-                     iterator.hasNext();) {
-                    iterator.next().remove();
-                    iterator.remove();
-                }
 
                 // Update mCurrentPerson
-                mCurrentPerson = person;
+                mCurrentPerson = mFamilyMap.findPersonByID(event.getPersonID());
 
-                // Set the gender icon
-                if (person.getGender().equals("m")) {
-                    mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
-                            R.drawable.ic_male_gender));
-                } else {
-                    mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
-                            R.drawable.ic_female_gender));
-                }
-
-                // Set the name and information of the person associated with the event
-                mEventPerson.setText(mCurrentPerson.getFullName());
-                mEventDetails.setText(event.getEventType().substring(0, 1).toUpperCase() +
-                        event.getEventType().substring(1) + ": " + event.getCity() + ", " +
-                        event.getCountry() + " (" + event.getYear() + ")");
-
+                // Update the information in the box at the bottom of the screen
+                updateEventDisplayBox();
 
                 // Draw relationship lines
-                drawRelationshipLines(marker);
+                updateRelationshipLines();
 
                 return false;
             }
@@ -280,12 +266,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Based on the marker just selected, draws lines enabled by settings on the map.
      */
-    private void drawRelationshipLines(Marker marker) {
+    private void updateRelationshipLines() {
+        // Does the array-list of lines need to be initialized?
+        if (mRelationshipLines == null) mRelationshipLines = new ArrayList<>();
+
+        // Erase all relationship lines currently on the map
+        for (Iterator<Polyline> iterator = mRelationshipLines.iterator();
+             iterator.hasNext();) {
+            iterator.next().remove();
+            iterator.remove();
+        }
+
+        // Is the current marker filtered?
+        if (mFamilyMap.isFiltered((Event) mCurrentMarker.getTag())) return;
+
         // Are spouse lines enabled?
-        if (mSettings.getSpouseLinesEnabled()) drawSpouseLine(marker.getPosition());
+        if (mSettings.getSpouseLinesEnabled())
+            drawSpouseLine(mCurrentMarker.getPosition());
 
         // Are family tree lines enabled?
-        if (mSettings.getFamilyTreeLinesEnabled()) drawFamilyTreeLines();
+        final float INIT_LINE_WIDTH = 10;
+        if (mSettings.getFamilyTreeLinesEnabled())
+            drawFamilyTreeLines(mCurrentMarker.getPosition(), mCurrentPerson, INIT_LINE_WIDTH);
 
         // Are life-story lines enabled?
         if (mSettings.getLifeStoryLinesEnabled()) drawLifeStoryLines();
@@ -296,16 +298,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * spouse of the person connected to the selected event.
      */
     private void drawSpouseLine(LatLng location_a) {
-        Log.i(TAG, "Drawing a spouse line for " + mCurrentPerson.getFullName());
-
         // Is the current person married?
         if (mCurrentPerson.getSpouseID() != null) {
             // Retrieve the person's spouse's earliest event
-            Event spouses_event = mFamilyMap.getPersonsEarliestEvent(mCurrentPerson.getSpouseID());
-            if (spouses_event == null) return;
+            Event spouses_event = mFamilyMap.getPersonsEvents(mCurrentPerson.getSpouseID()).get(0);
 
-            Log.d(TAG, "...whose spouse is " + mFamilyMap.findPersonByID(mCurrentPerson.getSpouseID()).getFullName());
-            Log.d(TAG, "...whose earliest event is [" + spouses_event.getEventType() + "], in " + spouses_event.getCity() + ", " + spouses_event.getCountry() + " (" + spouses_event.getYear() + ")");
+            Log.i(TAG, "The earliest event found for " + mFamilyMap.findPersonByID(mCurrentPerson.getSpouseID()).getFullName() + " is [" + spouses_event.getEventType() + "]");
+
+            // Is the event that was found marked on the map?
+            if (spouses_event != null) if (mFamilyMap.isFiltered(spouses_event)) return;
 
             // Get the location of the event just retrieved
             LatLng location_b = new LatLng(spouses_event.getLatitude(),
@@ -315,27 +316,138 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
                     .add(location_a, location_b)
                     .color(mSettings.getSpouseLinesColor()));
-
-            // Add line to array-list of all lines
             mRelationshipLines.add(line);
-        } else {
-            Log.d(TAG, "mCurrentPerson.getSpouseID = " + mCurrentPerson.getSpouseID());
-            Log.d(TAG, "mCurrentPerson.getFatherID = " + mCurrentPerson.getFatherID());
-            Log.d(TAG, "mCurrentPerson.getMotherID = " + mCurrentPerson.getMotherID());
+        }
+    }
+
+    /**
+     * Draws a line between the event just selected,
+     *
+     * @param location_a the location of the event at which to (potentially) start drawing a line
+     * @param person the person associated with the marker at which the line will (potentially) be
+     *               drawn from
+     * @param line_width the width of the line to be drawn (this decreases with each successive
+     *                   generation)
+     */
+    private void drawFamilyTreeLines(LatLng location_a, Person person, float line_width) {
+        Log.i(TAG, "Drawing family tree lines for " + person.getFullName());
+
+        // Is the line width negative?
+        if (line_width < 0) line_width = 1;
+
+        // Does the person have a father?
+        if (person.getFatherID() != null) {
+            // Retrieve the person's father's earliest event
+            Event fathers_event = mFamilyMap.getPersonsEvents(person.getFatherID()).get(0);
+
+            // Is the event found currently marked on the map?
+            if (!mFamilyMap.isFiltered(fathers_event)) {
+                // Get the location of the event
+                LatLng location_b = new LatLng(fathers_event.getLatitude(),
+                        fathers_event.getLongitude());
+
+                // Draw a line from the marker to the person's father's earliest event
+                Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                        .add(location_a, location_b)
+                        .color(mSettings.getFamilyTreeLinesColor())
+                        .width(line_width));
+                mRelationshipLines.add(line);
+
+                // Recurse on the person's father
+                final float LINE_DECREMENT = 3;
+                drawFamilyTreeLines(location_b, mFamilyMap.findPersonByID(person.getFatherID()),
+                        line_width - LINE_DECREMENT);
+            }
+        }
+
+        // Does the person have a mother?
+        if (person.getMotherID() != null) {
+            // Retrieve the person's mother's earliest event
+            Event mothers_event = mFamilyMap.getPersonsEvents(person.getMotherID()).get(0);
+
+            // Is the event found currently marked on the map?
+            if (!mFamilyMap.isFiltered(mothers_event)) {
+                // Get the location of the event
+                LatLng location_b = new LatLng(mothers_event.getLatitude(),
+                        mothers_event.getLongitude());
+
+                // Draw a line from the marker to the person's mother's earliest event
+                Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                        .add(location_a, location_b)
+                        .color(mSettings.getFamilyTreeLinesColor())
+                        .width(line_width));
+                mRelationshipLines.add(line);
+
+                // Recurse on the person's mother
+                final float LINE_DECREMENT = 3;
+                drawFamilyTreeLines(location_b, mFamilyMap.findPersonByID(person.getMotherID()),
+                        line_width - LINE_DECREMENT);
+            }
         }
     }
 
     /**
      * Draws a line between the event just selected,
      */
-    private void drawFamilyTreeLines() {
+    private void drawLifeStoryLines() {
+        // Retrieve the person ID associated with the currently selected marker
+        String person_id = ((Event) mCurrentMarker.getTag()).getPersonID();
 
+        // Get all of the events associated with the person connected to that ID
+        ArrayList<Event> events = mFamilyMap.getPersonsEvents(person_id);
+
+        // Was there at least one event returned?
+        if (events.size() > 0) {
+            // Set it as the 'current event' in preparation for loop
+            Iterator<Event> iterator = events.iterator();
+            Event current_event = iterator.next();
+
+            while (iterator.hasNext()) {
+                // Get the next event in the array-list
+                Event next_event = iterator.next();
+
+                // Draw a line from the current event's maker to the next's
+                Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                        .add(new LatLng(current_event.getLatitude(), current_event.getLongitude()),
+                                new LatLng(next_event.getLatitude(), next_event.getLongitude()))
+                        .color(mSettings.getLifeStoryLinesColor()));
+                mRelationshipLines.add(line);
+
+                // Set the next event to be the current one before looping
+                current_event = next_event;
+            }
+        }
     }
 
     /**
-     * Draws a line between the event just selected,
+     * Updates the information in the event display box.
      */
-    private void drawLifeStoryLines() {
+    private void updateEventDisplayBox() {
+        // If mCurrentMarker is filtered or if mCurrentMarker or mCurrentPerson is null, then reset
+        // the event information box
+        if (mCurrentMarker == null || mCurrentPerson == null ||
+                mFamilyMap.isFiltered((Event) mCurrentMarker.getTag())) {
+            mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_location));
+            mEventPerson.setText(R.string.click_a_marker_top);
+            mEventDetails.setText(R.string.click_a_marker_bottom);
+
+        } else {
+            // Set the gender icon
+            if (mCurrentPerson.getGender().equals("m")) {
+                mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                        R.drawable.ic_male_gender));
+            } else {
+                mEventIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                        R.drawable.ic_female_gender));
+            }
+
+            // Set the name and information of the person associated with the event
+            Event event = (Event) mCurrentMarker.getTag();
+            mEventPerson.setText(mCurrentPerson.getFullName());
+            mEventDetails.setText(event.getEventType().substring(0, 1).toUpperCase() +
+                    event.getEventType().substring(1) + ": " + event.getCity() + ", " +
+                    event.getCountry() + " (" + event.getYear() + ")");
+        }
 
     }
 }

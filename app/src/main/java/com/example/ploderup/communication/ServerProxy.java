@@ -1,6 +1,11 @@
 package com.example.ploderup.communication;
 import android.util.Log;
 
+import com.example.ploderup.model.FamilyMap;
+import com.example.ploderup.model.Filter;
+import com.example.ploderup.model.Search;
+import com.example.ploderup.model.Settings;
+import com.example.ploderup.model.UserInfo;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
@@ -31,6 +36,12 @@ public class ServerProxy {
     private final String TAG = "ServerProxy";
     private final String HTTP_GET = "GET";
     private final String HTTP_POST = "POST";
+
+    private FamilyMap mFamilyMap = FamilyMap.getInstance();
+    private Filter mFilter = Filter.getInstance();
+//    private Search mSearch = Search.getInstance();
+    private Settings mSettings = Settings.getInstance();
+    private UserInfo mUserInfo = UserInfo.getInstance();
 
     private String mAuthToken;
     String getAuthToken() { return mAuthToken; }
@@ -103,7 +114,22 @@ public class ServerProxy {
      * LOGOUT USER
      * [Explanation]
      */
-//    public void logoutUser(String url_prefix,)
+    public void logoutUser() {
+        this.mAuthToken = null;
+        this.mRootPersonID = null;
+
+        mFamilyMap.setRootPersonID(null);
+        mFamilyMap.setAllEvents(null);
+        mFamilyMap.setAllPeople(null);
+        mFamilyMap.setDataSyncDone(true);
+
+        mFilter.disableAllFilters();
+
+        mSettings.setLoggedIn(false);
+        mSettings.resetAllSettings();
+
+        mUserInfo.resetAllFields();
+    }
 
     /**
      * GET FAMILY TREE

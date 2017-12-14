@@ -10,17 +10,7 @@ public class Filter {
 // SINGLETON STUFF
     private static Filter mFilter;
     private Filter() {
-        // Disable all filters
-        mFilterBaptismEvents = false;
-        mFilterBirthEvents = false;
-        mFilterCensusEvents = false;
-        mFilterChristeningEvents = false;
-        mFilterDeathEvents = false;
-        mFilterMarriageEvents = false;
-        mFilterFathersSide = false;
-        mFilterMothersSide = false;
-        mFilterMaleEvents = false;
-        mFilterFemaleEvents = false;
+        disableAllFilters();
     }
     public static Filter getInstance() {
         if(mFilter == null) mFilter = new Filter();
@@ -119,5 +109,19 @@ public class Filter {
     public void setFilterFemaleEvents(boolean mFilterFemaleEvents) {
         this.mFilterFemaleEvents = mFilterFemaleEvents;
         Log.i(TAG, "mFilterFemaleEvents set to " + mFilterFemaleEvents);
+    }
+
+// METHODS
+    public void disableAllFilters() {
+        mFilterBaptismEvents = false;
+        mFilterBirthEvents = false;
+        mFilterCensusEvents = false;
+        mFilterChristeningEvents = false;
+        mFilterDeathEvents = false;
+        mFilterMarriageEvents = false;
+        mFilterFathersSide = false;
+        mFilterMothersSide = false;
+        mFilterMaleEvents = false;
+        mFilterFemaleEvents = false;
     }
 }

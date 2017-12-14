@@ -130,4 +130,18 @@ public class UserInfo {
         // All tests passed
         return true;
     }
+
+    /**
+     * Resets all member values to null.
+     */
+    public void resetAllFields() {
+        mServerHost = null;
+        mServerPort = null;
+        mUsername = null;
+        mPassword = null;
+        mFirstName = null;
+        mLastName = null;
+        mEmail = null;
+        mGender = null;
+    }
 }

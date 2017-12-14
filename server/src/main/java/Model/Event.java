@@ -1,10 +1,12 @@
 package Model;
+import org.ibex.nestedvm.util.Sort;
+
 import java.util.Calendar;
 
 import static java.lang.Math.abs;
 import static java.util.UUID.randomUUID;
 
-public class Event {
+public class Event implements Comparable<Event> {
 // Constructors
     /**
      * DEFAULT CONSTRUCTOR:
@@ -57,6 +59,39 @@ public class Event {
 
 
 // Class Methods
+    @Override
+    public int compareTo(Event compare_var) {
+        // Is one of the two a birth event?
+        if (this.getEventType().equalsIgnoreCase("birth")) {
+            if (compare_var.getEventType().equalsIgnoreCase("birth")) return 0; else return -1;
+        } else if (compare_var.getEventType().equalsIgnoreCase("birth")) {
+            return 1;
+        }
+
+        // Is one of the two a death event?
+        if (this.getEventType().equalsIgnoreCase("death")) {
+            if (compare_var.getEventType().equalsIgnoreCase("death")) return 0; else return 1;
+        } else if (compare_var.getEventType().equalsIgnoreCase("death")) {
+            return -1;
+        }
+
+        // Do both of the events have valid years?
+        if (this.getYear() > 0 && compare_var.getYear() > 0) {
+            // Is one year greater than the other?
+            if (this.getYear() < compare_var.getYear())
+                return -1;
+            else if (this.getYear() > compare_var.getYear())
+                return 1;
+
+        // One of the events does not have a valid year, the other does
+        } else if (this.getYear() > 0 || compare_var.getYear() > 0) {
+            if (this.getYear() > 0) return -1; else return 1;
+        }
+
+        // Neither of the events have valid years; compare types lexicographically
+        return this.getEventType().compareToIgnoreCase(compare_var.getEventType());
+    }
+
     /**
      * MEMBERS VALID:
      * Checks whether current members are valid or not (does not check for uniqueness of IDs).

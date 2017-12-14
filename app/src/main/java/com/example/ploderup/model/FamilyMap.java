@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.ploderup.userinterface.BuildConfig;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import Model.Event;
@@ -45,12 +46,15 @@ public class FamilyMap {
     /**
      * All of the events connected to people in the logged in user's family tree. This member is
      * reloaded every time the app syncs its data with the FamilyMap server. It is set to null on
-     * logout.
+     * logout. Note, it is also sorted as specified in the app.
      */
     private ArrayList<Event> mAllEvents;
     public ArrayList<Event> getAllEvents() { return mAllEvents; }
     public void setAllEvents(ArrayList<Event> mAllEvents) {
         this.mAllEvents = mAllEvents;
+
+        // If the array-list was just initialized (and not set to null), then sort it
+        if(this.mAllEvents != null) Collections.sort(this.mAllEvents);
         Log.i(TAG, "mAllEvents modified");
     }
 
@@ -69,6 +73,10 @@ public class FamilyMap {
      * @see Filter
      */
     public boolean isFiltered(Event event) {
+        if (event == null) {
+            Log.d(TAG, "Null pointer passed to isFiltered");
+            return false;
+        }
         if (findPersonByID(event.getPersonID()) == null) {
             Log.e(TAG, "Event passed to isFiltered is not associated with any person in mAllPeople");
             return false;
@@ -191,85 +199,65 @@ public class FamilyMap {
     }
 
     /**
-     * Retrieves the earliest event associated with the given person, where events are ordered
-     * chronologically, as follows: Birth events, events with years (ordered by event-type,
-     * alphabetically), events without years (ordered by event-type, alphabetically), death events.
+     * Retrieves all parents, spouse and children for the person associated with the given ID.
      */
-    public Event getPersonsEarliestEvent(String person_id) {
+    public ArrayList<Person> getPersonsFamily(String person_id) {
         if (person_id == null) {
-            Log.e(TAG, "Null pointer passed to getPersonsEarliestEvent");
+            Log.e(TAG, "Null pointer passed to getPersonsFamily");
             return null;
         }
         if (person_id.equals("")) {
-            Log.e(TAG, "Empty string passed to getPersonsEarliestEvent");
+            Log.e(TAG, "Empty string passed to getPersonsFamily");
+            return null;
+        }
+        if (findPersonByID(person_id) == null) {
+            Log.e(TAG, "Person ID passed to getPersonsFamily not connected to any people in " +
+                    "app memory");
+        }
+
+        ArrayList<Person> family = new ArrayList<>();
+
+        // Does the person have a father?
+        if (findPersonByID(person_id).getFatherID() != null)
+            family.add(findPersonByID(findPersonByID(person_id).getFatherID()));
+
+        // Does the person have a mother?
+        if (findPersonByID(person_id).getMotherID() != null)
+            family.add(findPersonByID(findPersonByID(person_id).getMotherID()));
+
+        // Does the person have a spouse?
+        if (findPersonByID(person_id).getSpouseID() != null)
+            family.add(findPersonByID(findPersonByID(person_id).getSpouseID()));
+
+        // Does the person have any children?
+        for (Person person : mAllPeople) {
+            if (person.getFatherID().equals(person_id) || person.getMotherID().equals(person_id))
+                family.add(person);
+        }
+
+        return family;
+    }
+
+    /**
+     * Retrieves all events associated with a person connected to a given ID.
+     */
+    public ArrayList<Event> getPersonsEvents(String person_id) {
+        if (person_id == null) {
+            Log.e(TAG, "Null pointer passed to getPersonsEvents");
+            return null;
+        }
+        if (person_id.equals("")) {
+            Log.e(TAG, "Empty string passed to getPersonsEvents");
             return null;
         }
 
         ArrayList<Event> events = new ArrayList<>();
-        Event earliest_event = null;
 
-        // Get all events associated with the person associated with the given ID
+        // Get all events associated with the person connected to the given ID
         for (Event event : mAllEvents) {
             if (event.getPersonID().equals(person_id)) events.add(event);
         }
 
-        // How many events were found?
-        switch(events.size()) {
-            case 0: return null;
-            case 1: return events.get(0);
-            default: // Multiple events were found
-        }
-
-        // Does this person have a birth event?
-        for (Event event : events) {
-            if (event.getEventType().equalsIgnoreCase("birth")) return event;
-        }
-
-        // Do any of the events have years associated with them?
-        for (Event event : events) {
-            // Does the event have a valid year?
-            if (event.getYear() > 0) {
-                // Does 'earliest event' need to be initialized?
-                if (earliest_event == null) {
-                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
-
-                // It's already initialized; is its year later than 'event's?
-                } else if (event.getYear() < earliest_event.getYear()) {
-                    // Then set it as the new 'earliest event
-                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
-
-                // Is it's year equal to 'event's?
-                } else if (event.getYear() == earliest_event.getYear()) {
-                    // Alphabetically, does 'event's type precede 'earliest event's type?
-                    if (event.getEventType().compareToIgnoreCase(earliest_event.getEventType()) < 0)
-                        if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
-                }
-            }
-        }
-
-        // Was an event found?
-        if (earliest_event != null) return earliest_event;
-
-        // Are there any not-death events without years?
-        for (Event event : events) {
-            // Does 'earliest event' need to be initialized?
-            if (earliest_event == null) {
-                if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
-
-            // It's already initialized; is 'event's type lexicographically less than 'earliest's?
-            } else {
-                if (event.getEventType().compareToIgnoreCase(earliest_event.getEventType()) < 0)
-                    if (!event.getEventType().equalsIgnoreCase("death")) earliest_event = event;
-            }
-        }
-
-        // Was an event found?
-        if (earliest_event != null) return earliest_event;
-
-        // At this point, if there was no birth event, nor any not-death events there could only
-        // have been one event: death. A single death event would have been caught by the switch
-        // performed earlier. So, this point in code should never be reached.
-        Log.e(TAG, "Event checks failed");
-        return null;
+        return events;
     }
 }
