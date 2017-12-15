@@ -39,7 +39,7 @@ public class ServerProxy {
 
     private FamilyMap mFamilyMap = FamilyMap.getInstance();
     private Filter mFilter = Filter.getInstance();
-//    private Search mSearch = Search.getInstance();
+    private Search mSearch = Search.getInstance();
     private Settings mSettings = Settings.getInstance();
     private UserInfo mUserInfo = UserInfo.getInstance();
 
@@ -124,6 +124,8 @@ public class ServerProxy {
         mFamilyMap.setDataSyncDone(true);
 
         mFilter.disableAllFilters();
+
+        mSearch.resetSearchResults();
 
         mSettings.setLoggedIn(false);
         mSettings.resetAllSettings();

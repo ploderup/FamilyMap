@@ -202,7 +202,7 @@ public class FamilyMap {
     /**
      * Retrieves all parents, spouse and children for the person associated with the given ID.
      */
-    public HashMap<String, Person> getPersonsFamily(String person_id) {
+    public ArrayList<Person> getPersonsFamily(String person_id) {
         if (person_id == null) {
             Log.e(TAG, "Null pointer passed to getPersonsFamily");
             return null;
@@ -216,30 +216,27 @@ public class FamilyMap {
                     "app memory");
         }
 
-        HashMap<String, Person> family = new HashMap<>();
+        ArrayList<Person> family = new ArrayList<>();
         Person person = findPersonByID(person_id);
 
         // Does the person have a father?
-        if (findPersonByID(person_id).getFatherID() != null)
-            family.put("Father", findPersonByID(person.getFatherID()));
+        if (person.getFatherID() != null)
+            family.add(findPersonByID(person.getFatherID()));
 
         // Does the person have a mother?
         if (person.getMotherID() != null)
-            family.put("Mother", findPersonByID(person.getMotherID()));
+            family.add(findPersonByID(person.getMotherID()));
 
         // Does the person have a spouse?
         if (person.getSpouseID() != null)
-            if (findPersonByID(person.getSpouseID()).getGender().equalsIgnoreCase("m"))
-                family.put("Husband", findPersonByID(person.getSpouseID()));
-            else
-                family.put("Wife", findPersonByID(person.getSpouseID()));
+                family.add(findPersonByID(person.getSpouseID()));
 
         // Does the person have any children?
         for (Person p : mAllPeople) {
-            if (person.getFatherID() != null && person.getFatherID().equals(person_id) ||
-                    person.getMotherID() != null && person.getMotherID().equals(person_id))
-                if (p.getGender().equalsIgnoreCase("m"))
-                    family.put("Brother", person); else family.put("Sister", person);
+            if (p.getFatherID() != null && p.getFatherID().equals(person_id) ||
+                    p.getMotherID() != null && p.getMotherID().equals(person_id)) {
+                family.add(p);
+            }
         }
 
         return family;
@@ -266,5 +263,44 @@ public class FamilyMap {
         }
 
         return events;
+    }
+
+    /**
+     * Calculates the relationship between two given people. If the first person is the daughter of
+     * the second, for instance, then "Daughter" will be returned (rather than "Mother" or
+     * "Father").
+     */
+    public String calculateRelationship(String person_a, String person_b) {
+        if (person_a == null || person_b == null)
+            return null;
+        if (person_a.equals("") || person_b.equals(""))
+            return null;
+
+        // Retrieve the people connected to the given IDs
+        final Person PERSON_A = findPersonByID(person_a);
+        final Person PERSON_B = findPersonByID(person_b);
+
+        // Is A B's father?
+        if (person_a.equals(PERSON_B.getFatherID())) return "Father";
+
+        // Is A B's mother?
+        if (person_a.equals(PERSON_B.getMotherID())) return "Mother";
+
+        // Is A B's spouse?
+        if (person_a.equals(PERSON_B.getSpouseID()))
+            if (PERSON_A.getGender().equals("m")) return "Husband"; else return "Wife";
+
+        // Does A have parents?
+        if (PERSON_A.getFatherID() != null)
+            // Is A B's child?
+            if (PERSON_A.getFatherID().equals(person_b))
+                if (PERSON_A.getGender().equals("m")) return "Son"; else return "Daughter";
+        if (PERSON_A.getMotherID() != null)
+            // Is A B's child?
+            if (PERSON_A.getMotherID().equals(person_b))
+                if (PERSON_A.getGender().equals("m")) return "Son"; else return "Daughter";
+
+        // A and B are not nuclear-ly related
+        return "Not related";
     }
 }

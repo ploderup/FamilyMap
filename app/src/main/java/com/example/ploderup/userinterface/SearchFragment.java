@@ -1,23 +1,41 @@
 package com.example.ploderup.userinterface;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.ploderup.model.FamilyMap;
+import com.example.ploderup.model.Search;
+import com.example.ploderup.userinterface.recyclerlist.ResultAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import Model.Event;
+import Model.Person;
+
 
 public class SearchFragment extends Fragment {
     // MEMBERS
     private final String TAG = "SearchFragment";
     private SearchView mSearchBar;
-    private TextView b1;
-    private TextView b2;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mListAdapter;
+
+    private Search sSearch = Search.getInstance();
+    private List<Object> mSearchResults = new ArrayList<>();
 
     // METHODS
     @Override
@@ -32,14 +50,13 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // Wire-up all widgets
         mSearchBar = v.findViewById(R.id.search_bar);
-        b1 = v.findViewById(R.id.box_one);
-        b2 = v.findViewById(R.id.box_two);
         mSearchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // TODO:
+                mSearchResults.clear();
+                mSearchResults.addAll(sSearch.searchFamilyMap(query));
+                mListAdapter.notifyDataSetChanged();
                 return false;
             }
 
@@ -49,6 +66,11 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+
+        mRecyclerView = v.findViewById(R.id.search_recycler_view);
+        mListAdapter = new ResultAdapter(mSearchResults);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mListAdapter);
 
         return v;
     }

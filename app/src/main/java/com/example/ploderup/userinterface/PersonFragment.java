@@ -1,6 +1,9 @@
 package com.example.ploderup.userinterface;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.ReceiverCallNotAllowedException;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,10 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ploderup.model.FamilyMap;
+import com.example.ploderup.userinterface.expandablelist.ExpandableListAdapter;
+import com.example.ploderup.userinterface.expandablelist.ExpandableListDataPump;
 
 import org.w3c.dom.Text;
 
@@ -35,8 +43,13 @@ public class PersonFragment extends Fragment {
     private TextView mFirstNameTextView;
     private TextView mLastNameTextView;
     private TextView mGenderTextView;
-    private RecyclerView mLifeEventsRecyclerView;
-    private RecyclerView mFamilyMemberRecyclerView;
+
+    private String mCurrentPersonID;
+
+    private ExpandableListAdapter mExpandableListAdapter;
+    private ExpandableListView mExpandableListView;
+    private List<String> mExpandableListTitle;
+    private HashMap<String, List<Object>> mExpandableListDetail;
 
     private FamilyMap sFamilyMap = FamilyMap.getInstance();
 
@@ -61,6 +74,7 @@ public class PersonFragment extends Fragment {
 
         // Retrieve data passed by Intent (this should never be null)
         Bundle bundle = getArguments();
+        mCurrentPersonID = bundle.getString("person_id");
 
         // Fill text views
         mFirstNameTextView.setText(bundle.getString("first_name"));
@@ -76,19 +90,55 @@ public class PersonFragment extends Fragment {
                 Log.e(TAG, "Invalid gender passed by Intent");
         }
 
-        // Set-up recycler views
-        mLifeEventsRecyclerView = v.findViewById(R.id.life_events_recycler_view);
-        mLifeEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mLifeEventsRecyclerView
-                .setAdapter(new EventListAdapter(
-                        sFamilyMap.getPersonsEvents(bundle.getString("person_id"))));
-        mFamilyMemberRecyclerView = v.findViewById(R.id.family_members_recycler_view);
-        mFamilyMemberRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mFamilyMemberRecyclerView
-                .setAdapter(new PersonListAdapter(
-                        sFamilyMap.getPersonsFamily(bundle.getString("person_id"))));
+        // Retrieve the expandable list view
+        mExpandableListView = v.findViewById(R.id.expandable_list);
+        mExpandableListDetail = ExpandableListDataPump.getData(mCurrentPersonID);
+        mExpandableListTitle = new ArrayList<String> (mExpandableListDetail.keySet());
+        mExpandableListAdapter = new ExpandableListAdapter(getActivity(), mExpandableListTitle,
+                mExpandableListDetail, mCurrentPersonID);
+        mExpandableListView.setAdapter(mExpandableListAdapter);
+        mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int i,
+                                        int i1, long l) {
+                Object item = mExpandableListAdapter.getChild(i, i1);
+
+                // Is the 'list item' a Person object?
+                if (item instanceof Person) {
+                    // Cast the item to Person type
+                    Person person = (Person) item;
+
+                    // Start another PersonActivity
+                    getActivity().startActivity(new Intent(getActivity(), PersonActivity.class)
+                            .putExtra("person_id", person.getPersonID())
+                            .putExtra("first_name", person.getFirstName())
+                            .putExtra("last_name", person.getLastName())
+                            .putExtra("gender", person.getGender()));
+
+                // It's an Event object
+                } else {
+                    // Cast the item to an Event type
+                    Event event = (Event) item;
+
+                    // Start a new MapActivity
+                    getActivity().startActivity(new Intent(getActivity(), MapActivity.class)
+                            .putExtra("event_id", event.getEventID())
+                            .putExtra("person_id", event.getPersonID()));
+                }
+
+
+
+                return false;
+            }
+        });
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_mp, menu);
     }
 
     @Override
@@ -98,6 +148,11 @@ public class PersonFragment extends Fragment {
                 getActivity().finish();
                 return true;
 
+            case R.id.top_menu_item:
+                startActivity(new Intent(getActivity(), MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                break;
+
             default:
                 Log.e(TAG, "Default (error) case reached at onOptionsItemSelected");
                 Log.e(TAG, "Item ID was " + Integer.toHexString(item.getItemId()));
@@ -106,113 +161,4 @@ public class PersonFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-// INNER CLASSES
-    private class PersonHolder extends RecyclerView.ViewHolder {
-        private String mRelationship;
-        private Person mPerson;
-
-        private ImageView mIcon;
-        private TextView mTitle;
-        private TextView mDetails;
-
-        public PersonHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_person, parent, false));
-
-            // Wire-up widgets
-            mIcon = parent.findViewById(R.id.list_item_icon);
-            mTitle = parent.findViewById(R.id.list_item_title);
-            mDetails = parent.findViewById(R.id.list_item_details);
-        }
-
-        public void bind(String r, Person p) {
-            mRelationship = r;
-            mPerson = p;
-
-            if (mPerson.getGender().equalsIgnoreCase("m")) mIcon.setImageDrawable(
-                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_male_gender));
-            else mIcon.setImageDrawable(
-                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_female_gender));
-            mTitle.setText(mPerson.getFullName());
-            mDetails.setText(mRelationship);
-        }
-    }
-
-    private class EventHolder extends RecyclerView.ViewHolder {
-        private Event mEvent;
-        private String mPersonFullName;
-
-        private ImageView mIcon;
-        private TextView mTitle;
-        private TextView mDetails;
-
-        public EventHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_person, parent, false));
-
-            // Wire-up widgets
-            mIcon = parent.findViewById(R.id.list_item_icon);
-            mTitle = parent.findViewById(R.id.list_item_title);
-            mDetails = parent.findViewById(R.id.list_item_details);
-        }
-
-        public void bind(Event e) {
-            mEvent = e;
-            mPersonFullName = sFamilyMap.findPersonByID(e.getPersonID()).getFullName();
-
-            mIcon.setImageDrawable(
-                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_location));
-            mTitle.setText(mEvent.getEventType().substring(0,1).toUpperCase() +
-                    mEvent.getEventType().substring(1).toLowerCase() + ": " + mEvent.getCity() +
-                    ", " + mEvent.getCountry() + " (" + mEvent.getYear() + ")");
-            mDetails.setText(mPersonFullName);
-        }
-    }
-
-    private class PersonListAdapter extends RecyclerView.Adapter<PersonHolder> {
-        private HashMap<String, Person> mFamilyMembers;
-
-        public PersonListAdapter(HashMap<String, Person> mFamilyMembers) {
-            this.mFamilyMembers = mFamilyMembers;
-        }
-
-        @Override
-        public PersonHolder onCreateViewHolder(ViewGroup parent, int view_type) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new PersonHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(PersonHolder holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mFamilyMembers.size();
-        }
-    }
-
-    private class EventListAdapter extends RecyclerView.Adapter<EventHolder> {
-        private ArrayList<Event> mPersonEvents;
-
-        public EventListAdapter(ArrayList<Event> mPersonEvents) {
-            this.mPersonEvents = mPersonEvents;
-        }
-
-        @Override
-        public EventHolder onCreateViewHolder(ViewGroup parent, int view_type) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new EventHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(EventHolder holder, int position) {
-            holder.bind(mPersonEvents.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mPersonEvents.size();
-        }
-    }
 }

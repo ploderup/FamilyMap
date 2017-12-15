@@ -2,13 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/tools">
 
-    <item android:id="@+id/back_menu_item"
-        android:title="@string/go_back"
-        android:icon="@drawable/ic_menu_arrow_left"
-        app:showAsAction="ifRoom|withText" />
-
     <item android:id="@+id/top_menu_item"
         android:title="@string/go_to_top"
         android:icon="@drawable/ic_menu_chevron_double_up"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="always" />
 </menu>

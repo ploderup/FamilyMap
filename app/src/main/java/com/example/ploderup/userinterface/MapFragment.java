@@ -21,6 +21,7 @@ import com.example.ploderup.model.Filter;
 import com.example.ploderup.model.Search;
 import com.example.ploderup.model.Settings;
 import com.example.ploderup.model.UserInfo;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -69,7 +70,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView called");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -159,7 +159,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     break;
 
                 case R.id.top_menu_item:
-                    // Scroll to the top of the view
+                    startActivity(new Intent(getActivity(), MainActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     break;
 
                 default:
@@ -186,8 +187,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         while(!mFamilyMap.getDataSyncDone());
 
         // Do the markers need to be placed?
-        if (mEventMarkers == null)
-            placeEventMarkers(mFamilyMap.getAllEvents()); else updateEventMarkers();
+        if (mEventMarkers == null) {
+            placeEventMarkers(mFamilyMap.getAllEvents());
+
+            // Does this fragment exist in the MapActivity?
+            if (getActivity() instanceof MapActivity) {
+                Event event = null;
+                Bundle bundle = getArguments();
+
+                // Set the current person and marker values
+                mCurrentPerson = mFamilyMap.findPersonByID(bundle.getString("person_id"));
+
+                // Search for the marker on the map with the same event ID as the one passed by intent
+                for (Marker m : mEventMarkers) {
+                    if (((Event) m.getTag()).getEventID().equals(bundle.getString("event_id"))) {
+                        mCurrentMarker = m;
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m.getPosition()));
+                        event = (Event) m.getTag();
+                        break;
+                    }
+                }
+
+                // Set up the event display box
+                mEventPerson.setText(mCurrentPerson.getFullName());
+                mEventDetails.setText(event.getEventType().substring(0, 1).toUpperCase() +
+                        event.getEventType().substring(1) + ": " + event.getCity() + ", " +
+                        event.getCountry() + " (" + event.getYear() + ")");
+            }
+
+        } else {
+            updateEventMarkers();
+        }
 
         // Is there a marker to place lines for?
         if (mCurrentMarker != null) updateRelationshipLines();

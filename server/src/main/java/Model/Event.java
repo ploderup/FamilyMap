@@ -148,17 +148,17 @@ public class Event implements Comparable<Event> {
      * LATITUDE:
      * A double.
      */
-    private double latitude;
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double la) { latitude = la; }
+    private Double latitude;
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double la) { latitude = la; }
 
     /**
      * LONGITUDE:
      * A double.
      */
-    private double longitude;
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double lo) { longitude = lo; }
+    private Double longitude;
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double lo) { longitude = lo; }
 
     /**
      * COUNTRY:
@@ -188,9 +188,9 @@ public class Event implements Comparable<Event> {
      * YEAR:
      * An integer.
      */
-    private int year;
-    public int getYear() { return year; }
-    public void setYear(int yr) { year = yr; }
+    private Integer year;
+    public Integer getYear() { return year; }
+    public void setYear(Integer yr) { year = yr; }
 }
 
 

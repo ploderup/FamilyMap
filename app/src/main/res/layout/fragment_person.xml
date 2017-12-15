@@ -89,39 +89,13 @@
         android:layout_marginBottom="5dp"
         android:background="@color/darkGray"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ExpandableListView android:id="@+id/expandable_list"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Life Events"
-        android:textSize="15sp"
-        android:textColor="@color/black"/>
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:divider="@color/darkGray"
+        android:dividerHeight="0.5dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/life_events_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/darkGray"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Family"
-        android:textSize="15sp"
-        android:textColor="@color/black"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/family_members_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
+    </ExpandableListView>
 
 </LinearLayout>

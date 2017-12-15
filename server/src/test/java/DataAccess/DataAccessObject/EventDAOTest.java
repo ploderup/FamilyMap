@@ -11,6 +11,7 @@ import Model.Event;
 import Model.Person;
 import Model.User;
 
+import static javax.swing.text.html.HTML.Tag.UL;
 import static org.junit.Assert.*;
 
 /**
@@ -163,7 +164,7 @@ public class EventDAOTest {
         assertEquals(e.getCountry(), "Norway");
         assertEquals(e.getCity(), "Oslo");
         assertEquals(e.getEventType(), "birth");
-        assertEquals(e.getYear(), 1976);
+        assertEquals(e.getYear(), Integer.valueOf(1976));
     }
 
     /**
@@ -217,7 +218,7 @@ public class EventDAOTest {
         assertEquals(es.get(0).getCountry(), "Norway");
         assertEquals(es.get(0).getCity(), "Oslo");
         assertEquals(es.get(0).getEventType(), "birth");
-        assertEquals(es.get(0).getYear(), 1976);
+        assertEquals(es.get(0).getYear(), Integer.valueOf(1976));
     }
 
     /**
@@ -263,7 +264,7 @@ public class EventDAOTest {
         assertEquals(e.getCountry(), "Norway");
         assertEquals(e.getCity(), "Oslo");
         assertEquals(e.getEventType(), "birth");
-        assertEquals(e.getYear(), 1976);
+        assertEquals(e.getYear(), Integer.valueOf(1976));
     }
 
     /**
